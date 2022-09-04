@@ -1,0 +1,202 @@
+﻿ターゲット1400(テストデータ)
+
+believe,を信じる、と思う
+consider,を見なす
+expect,を予期する、と思う
+decide,(を)決める
+allow,を許す
+remember,(を)覚えている
+worry,心配する
+concern,に関係する
+suggest,を提案する
+explain,(を)説明する
+describe,の特徴を述べる
+improve,を改善する
+produce,を生産する
+create,を創造する
+provide,を供給する
+increase,増える
+grow,成長する
+develop,を開発する
+rise,上がる、昇る
+raise,を上げる
+follow,(の)次に続く
+require,を要求する
+fill,を満たす
+support,を支持する
+share,を共同で使う
+face,に直面する
+touch,を感動させる
+store,を蓄える
+pay,(金)を支払う
+deal,(~ withで)に対処する、を扱う
+save,(時間・金銭など)を節約する
+happen,(事が)起こる [漠然的、または予想外の事象について]
+occur,(事が)起こる [具体的な事象、または丁寧な表現]
+work,機能する
+change,を変える
+run,を経営する
+turn,の向きを変える
+return,戻る、帰る
+stand,を我慢する
+lie,横たわる
+brain,脳
+mind,心、精神
+language,言語
+thought,考え
+knowlegde,知識
+skill,技術、技能
+technology,科学技術
+culture,文化
+experience,経験
+result,結果
+reason,理由
+cause,原因
+effect,影響、効果
+matter,問題
+sense,感覚
+way,方法
+term,期間
+situation,状況
+condition,状態
+position,(所定の)位置、場所
+environment,環境
+nature,自然
+research,研究、調査
+rule,規則
+interest,興味
+value,価値
+view,意見
+sound,音
+form,形状
+case,場合
+role,役割
+age,年齢、年
+care,世話
+risk,危険(性)
+human,人間の
+free,自由な
+sure,確信して [主観的]
+certain,確信して [客観的]
+main,主要な [重要であること]
+major,主要な [より優れていること]
+minor,重要でない
+clear,明らかな
+likely,ありそうな
+possible,あり得る
+similar,似ている
+close,(ごく)近い
+common,共通の
+general,一般的な
+ordinary,普通の
+specific,明確な
+particular,特別の
+individual,個人の
+unique,特有の
+rare,珍しい、まれな
+therefore,したがって、その結果
+thus,したがって [≒therefore]
+moreover,そのうえ、さらに [≒besides，furthermore]
+furthermore,そのうえ [≒moreover，furthermore]
+besides,そのうえ [≒moreover，furthermore]
+nonetheless,それにもかかわらず
+notice,(に)気づく
+note,(に)注意する、注目する
+discover,を発見する
+realize,を(はっきりと)理解する
+recognize,をそれとわかる
+encourage,を励ます
+force,(人)に無理やり…させる
+order,を注文する
+affect,に影響する [≒influence]
+offer,(人)に(物・事)を提供する
+demand,を要求する
+argue,と主張する [議論について]
+claim,を主張する [自身の意見の主張]
+object,反対する [≒oppose]
+challenge,に異議を唱える
+involve,を巻き込む
+include,を含む [追加、構成要素、おまけ]
+contain,を含む [物体、情報の内容など]
+relate,を関連づける
+connect,をつなぐ
+refer,言及する
+contact,と連絡を取る
+compare,を比べる
+measure,を測る
+mark,(印など)をつける
+approach,(に)近づく
+reach,に到着する
+achieve,を達成する
+receive,を受け取る
+complete,を完成させる
+lead,を導く
+win,(に)勝つ
+lose,を失う
+fail,できない
+miss,に乗り遅れる
+lack,に欠けている、が不足している
+reduce,を減らす
+avoid,を避ける
+limit,を制限する
+prevent,を妨げる
+wear,を身に着けている
+bear,を我慢する [≒stand]
+focus,を集中させる
+author,著者 [≒writer]
+professor,教授
+sentence,文
+passage,(文章の)一節
+message,伝言、メッセージ
+statement,陳述
+topic,論題、話題
+article,記事
+issue,問題
+theory,理論
+evidence,証拠 [≒proof]
+experiment,実験
+subject,(研究・話などの)主題
+government,政府
+policy,政策、方針
+education,教育
+company,会社
+colleague,同僚 [≒coworker]
+industry,産業
+trade,貿易
+economy,(国家などの)経済
+customer,顧客
+benefit,(物質的・精神的)利益
+figure,図
+rate,比率
+chance,見込み
+opportunity,機会
+project,事業
+practice,練習
+effort,努力
+quality,質
+quantity,量
+amount,金額
+scientific,科学の
+political,政治の
+social,社会の
+official,公式の
+financial,財政(上)の
+expensive,高価な
+various,さまざまな
+normal,普通の
+familiar,よく知っている
+appropriate,適切な
+necessary,必要な
+correct,正しい [≒right]
+available,利用できる、入手できる
+typical,典型的な
+positive,積極的な
+negative,好ましくない、消極的な
+passive,受動的な
+physical,身体の
+mental,精神の
+rather,むしろ
+instead,その代わりに
+otherwise,そうでなければ
+somehow,どうにかして
+ somewhat,いくぶん
