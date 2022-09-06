@@ -29,8 +29,8 @@ store,を蓄える
 pay,(金)を支払う
 deal,(~ withで)に対処する、を扱う
 save,(時間・金銭など)を節約する
-happen,(事が)起こる [漠然的、または予想外の事象について]
-occur,(事が)起こる [具体的な事象、または丁寧な表現]
+happen,(事が)起こる《漠然的、または予想外の事象について》
+occur,(事が)起こる《具体的な事象、または丁寧な表現》
 work,機能する
 change,を変える
 run,を経営する
@@ -74,10 +74,10 @@ care,世話
 risk,危険(性)
 human,人間の
 free,自由な
-sure,確信して [主観的]
-certain,確信して [客観的]
-main,主要な [重要であること]
-major,主要な [より優れていること]
+sure,確信して《主観的》
+certain,確信して《客観的》
+main,主要な《重要であること》
+major,主要な《より優れていること》
 minor,重要でない
 clear,明らかな
 likely,ありそうな
@@ -93,10 +93,10 @@ individual,個人の
 unique,特有の
 rare,珍しい、まれな
 therefore,したがって、その結果
-thus,したがって [≒therefore]
-moreover,そのうえ、さらに [≒besides，furthermore]
-furthermore,そのうえ [≒moreover，furthermore]
-besides,そのうえ [≒moreover，furthermore]
+thus,したがって《≒therefore》
+moreover,そのうえ、さらに《≒besides，furthermore》
+furthermore,そのうえ《≒besides，moreover》
+besides,そのうえ《≒moreover，furthermore》
 nonetheless,それにもかかわらず
 notice,(に)気づく
 note,(に)注意する、注目する
@@ -106,16 +106,16 @@ recognize,をそれとわかる
 encourage,を励ます
 force,(人)に無理やり…させる
 order,を注文する
-affect,に影響する [≒influence]
+affect,に影響する《≒influence》
 offer,(人)に(物・事)を提供する
 demand,を要求する
-argue,と主張する [議論について]
-claim,を主張する [自身の意見の主張]
-object,反対する [≒oppose]
+argue,と主張する《議論について》
+claim,を主張する《自身の意見の主張》
+object,反対する《≒oppose》
 challenge,に異議を唱える
 involve,を巻き込む
-include,を含む [追加、構成要素、おまけ]
-contain,を含む [物体、情報の内容など]
+include,を含む《追加、構成要素、おまけ》
+contain,を含む《物体、情報の内容など》
 relate,を関連づける
 connect,をつなぐ
 refer,言及する
@@ -139,9 +139,9 @@ avoid,を避ける
 limit,を制限する
 prevent,を妨げる
 wear,を身に着けている
-bear,を我慢する [≒stand]
+bear,を我慢する《≒stand》
 focus,を集中させる
-author,著者 [≒writer]
+author,著者《≒writer》
 professor,教授
 sentence,文
 passage,(文章の)一節
@@ -151,14 +151,14 @@ topic,論題、話題
 article,記事
 issue,問題
 theory,理論
-evidence,証拠 [≒proof]
+evidence,証拠《≒proof》
 experiment,実験
 subject,(研究・話などの)主題
 government,政府
 policy,政策、方針
 education,教育
 company,会社
-colleague,同僚 [≒coworker]
+colleague,同僚《≒coworker》
 industry,産業
 trade,貿易
 economy,(国家などの)経済
@@ -185,7 +185,7 @@ normal,普通の
 familiar,よく知っている
 appropriate,適切な
 necessary,必要な
-correct,正しい [≒right]
+correct,正しい《≒right》
 available,利用できる、入手できる
 typical,典型的な
 positive,積極的な
@@ -214,8 +214,8 @@ communicate,意思を通じ合う
 respect,を尊敬する
 prefer,の方を好む
 design,を設計する
-establish,を設立する [≒found]
-found,を設立する [≒establish]
+establish,を設立する《≒found》
+found,を設立する《≒establish》
 publish,を出版する
 serve,(の)役に立つ
 supply,を供給する
@@ -598,13 +598,13 @@ efficient,
 constant,
 nearby,
 distant,
-insist,
-intend,
-inspire,
-emphasize,
-propose,
-persuade,
-convience,
+insist,を断固要求する
+intend,を意図する、つもりでいる
+inspire,を奮起させる
+emphasize,を強調する、力説する
+propose,を提案する
+persuade,を説得する
+convience,に納得[確信]させる
 admit,
 favor,
 excuse,
