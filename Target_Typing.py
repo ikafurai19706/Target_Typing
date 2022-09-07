@@ -1,15 +1,18 @@
 ﻿# coding: utf-8
 import multiprocessing as m_process
-import sys, hashlib
+import hashlib
+import tkinter as tk
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 
 checksum = open('1400-test.txt', 'rb')
-if hashlib.sha256(checksum.read()).hexdigest == '805124a934de883955882e3986311bbf78db34c63c8c9ba62f329079a76a9d08':
+if hashlib.sha256(checksum.read()).hexdigest() == '83361224e1eaa0c43535d381d248ce04e7b4b9b5b469cdd1a0e0884c8508e234':
     checksum.close()
 else:
     checksum.close()
-    sys.exit()
+    messagebox.showerror('整合性エラー', 'ファイルデータが破損しています')
+    exit()
 
 def SetDisplayPos():
     S_width = root.winfo_screenwidth()
@@ -19,14 +22,22 @@ def SetDisplayPos():
     return '640x480+'+str(W_width)+'+'+str(W_height)
 
 def PlaceTitleScreen():
-    button1.pack(side='bottom', pady=30)
-    button2.pack(side='bottom')
-    label1.pack(pady=100)
+    b1.pack(side='bottom', pady=30)
+    b2.pack(side='bottom')
+    l1.pack(pady=100)
     
 def  ResetScreen():
-    button1.forget()
-    button2.forget()
-    label1.forget()
+    b1.forget()
+    b2.forget()
+    l1.forget()
+    rb1_1.forget()
+    rb1_2.forget()
+
+def PreGame():
+    ResetScreen()
+    l2.place(x=320, y=50, anchor='center')
+    rb1_1.place(x=240, y=150, anchor='center')
+    rb1_2.place(x=400, y=150, anchor='center')
 
 StartFlag = False
 root = Tk()
@@ -35,9 +46,14 @@ root.geometry(SetDisplayPos())
 root.resizable(False, False)
 root.protocol('WM_DELETE_WINDOW', False)
 
-button1 = ttk.Button(root, text='QUIT', padding=[15,10], command=sys.exit)
-button2 = ttk.Button(root, text='START', padding=[15,10], command=ResetScreen)
-label1 = ttk.Label(root, text='Target Typing!', relief='ridge', font=("Arial", 40), padding=[10])
+b1 = ttk.Button(root, text='QUIT', padding=[15,10], command=exit)
+b2 = ttk.Button(root, text='START', padding=[15,10], command=PreGame)
+l1 = ttk.Label(root, text='Target Typing!', relief='ridge', font=('Arial', 40), padding=[10])
+
+l2 = ttk.Label(root, text='Game Settings', font=('Arial', 30), padding=[15])
+rvar1 = tk.IntVar(value=2)
+rb1_1 = ttk.Radiobutton(root, text='rb1', value=1, variable=rvar1)
+rb1_2 = ttk.Radiobutton(root, text='rb2', value=2, variable=rvar1)
 
 if StartFlag == False:
     PlaceTitleScreen()
