@@ -199,4 +199,4 @@ rather,むしろ
 instead,その代わりに
 otherwise,そうでなければ
 somehow,どうにかして
- somewhat,いくぶん
+somewhat,いくぶん
