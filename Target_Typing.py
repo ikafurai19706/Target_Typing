@@ -1,16 +1,15 @@
 ﻿# coding: utf-8
 import multiprocessing as m_process
-import hashlib
+import sys, hashlib
 from tkinter import *
 from tkinter import ttk
 
 checksum = open('1400-test.txt', 'rb')
-
-if hashlib.sha256(checksum.read()).hexdigest != '805124a934de883955882e3986311bbf78db34c63c8c9ba62f329079a76a9d08':
+if hashlib.sha256(checksum.read()).hexdigest == '805124a934de883955882e3986311bbf78db34c63c8c9ba62f329079a76a9d08':
     checksum.close()
-    exit()
 else:
     checksum.close()
+    sys.exit()
 
 def SetDisplayPos():
     S_width = root.winfo_screenwidth()
@@ -24,7 +23,7 @@ def PlaceTitleScreen():
     button2.pack(side='bottom')
     label1.pack(pady=100)
     
-def ForgetAllWidget():
+def  ResetScreen():
     button1.forget()
     button2.forget()
     label1.forget()
@@ -36,8 +35,8 @@ root.geometry(SetDisplayPos())
 root.resizable(False, False)
 root.protocol('WM_DELETE_WINDOW', False)
 
-button1 = ttk.Button(root, text='QUIT', padding=[15,10], command=exit)
-button2 = ttk.Button(root, text='START', padding=[15,10], command=ForgetAllWidget)
+button1 = ttk.Button(root, text='QUIT', padding=[15,10], command=sys.exit)
+button2 = ttk.Button(root, text='START', padding=[15,10], command=ResetScreen)
 label1 = ttk.Label(root, text='Target Typing!', relief='ridge', font=("Arial", 40), padding=[10])
 
 if StartFlag == False:
