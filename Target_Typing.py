@@ -1,7 +1,12 @@
 ﻿# coding: utf-8
 import multiprocessing as m_process
+import hashlib
 from tkinter import *
 from tkinter import ttk
+
+f_1 = open('1400-test.txt', 'rb')
+if hashlib.sha256(f.read()).hexdigest != '805124a934de883955882e3986311bbf78db34c63c8c9ba62f329079a76a9d08':
+    exit()
 
 def SetDisplayPos():
     S_width = root.winfo_screenwidth()
