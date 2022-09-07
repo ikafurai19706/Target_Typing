@@ -4,9 +4,13 @@ import hashlib
 from tkinter import *
 from tkinter import ttk
 
-f_1 = open('1400-test.txt', 'rb')
-if hashlib.sha256(f_1.read()).hexdigest != '805124a934de883955882e3986311bbf78db34c63c8c9ba62f329079a76a9d08':
+checksum = open('1400-test.txt', 'rb')
+
+if hashlib.sha256(checksum.read()).hexdigest != '805124a934de883955882e3986311bbf78db34c63c8c9ba62f329079a76a9d08':
+    checksum.close()
     exit()
+else:
+    checksum.close()
 
 def SetDisplayPos():
     S_width = root.winfo_screenwidth()
