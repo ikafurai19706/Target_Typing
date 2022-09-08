@@ -11,7 +11,7 @@ if hashlib.sha256(checksum.read()).hexdigest() == '83361224e1eaa0c43535d381d248c
     checksum.close()
 else:
     checksum.close()
-    messagebox.showerror('整合性エラー', 'ファイルデータが破損しています')
+    messagebox.showerror('integrity error', 'File data is corrupted.')
     exit()
 
 def SetDisplayPos():
