@@ -22,6 +22,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Target_Typing.py" />
+    <Compile Include="test.py" />
+    <Compile Include="convert-sha256.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="1400-test.txt" />
