@@ -1,4 +1,4 @@
-﻿believe,を信じる、と思う
+believe,を信じる、と思う
 consider,を見なす
 expect,を予期する、と思う
 decide,(を)決める
