@@ -8,11 +8,8 @@ from tkinter import messagebox
 
 
 with open("1400-test.txt", "rb") as checksum:
-    if hashlib.sha256(checksum.read()).hexdigest() == "af7999b779c511c7bd25139b7483340d2cea15fa14fcb9ec655e6bbf5988d53b":
-        checksum.close()
-    else:
-        checksum.close()
-        messagebox.showerror("integrity error", "File data is corrupted.")
+    if hashlib.sha256(checksum.read()).hexdigest() != "af7999b779c511c7bd25139b7483340d2cea15fa14fcb9ec655e6bbf5988d53b":
+        messagebox.showerror("Integrity error", "File data is corrupted.")
         exit()
 
 
@@ -102,16 +99,18 @@ def StartScreen():
     executor.submit(StartFunc2)
 
 def StartFunc1():
-    time.sleep(1)
-    lvar1.set("2")
-    time.sleep(1)
-    lvar1.set("1")
-    time.sleep(1)
+	for i in reversed(range(1, 4)):
+		if end == True:
+			break
+		lvar1.set(i)
+    	time.sleep(1)
 
 def StartFunc2():
     ResetScreen()
     l6.place(x=320, y=240, anchor="center")
     time.sleep(3)
+	if end == True:
+		break
     l6.place_forget()
     GameStart()
 
@@ -141,7 +140,7 @@ def MainGame1():
 
 def Stopwatch():
     StartTime = time.time()
-    while Stop == False:
+    while stop == False and end == False:
         CurrentTime = time.time()
         DispTime = round(CurrentTime - StartTime, 2)
         if DispTime >= 100:
@@ -163,7 +162,7 @@ search = ""
 
 end = False
 StartFlag = False
-Stop = False
+stop = False
 
 
 root = Tk()
@@ -195,7 +194,7 @@ e1 = ttk.Entry(root, justify="right", validate="key", validatecommand=(tcl_Valid
 b3 = ttk.Button(root, text="Start!", style="light.TButton", padding=[10, 5], command=StartScreen)
 b4 = ttk.Button(root, text="Return", style="light.TButton", padding=[10, 5], command=TitleScreen)
 
-lvar1 = tk.StringVar(root, value="3")
+lvar1 = tk.StringVar(root)
 l6 = ttk.Label(root, textvariable=lvar1, font=("Arial", 120))
 
 
@@ -214,4 +213,5 @@ if StartFlag == False:
 
 root.mainloop()
 
+end = True
 os.kill(os.getpid(), 9)
