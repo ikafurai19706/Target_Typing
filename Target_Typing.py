@@ -1,5 +1,5 @@
 # coding: utf-8
-import concurrent.futures as conc_futures
+import threading as th
 import hashlib, time, re, random, sys, os, keyboard
 import tkinter as tk
 from tkinter import *
@@ -8,11 +8,8 @@ from tkinter import messagebox
 
 
 with open("1400-test.txt", "rb") as checksum:
-    if hashlib.sha256(checksum.read()).hexdigest() == "af7999b779c511c7bd25139b7483340d2cea15fa14fcb9ec655e6bbf5988d53b":
-        checksum.close()
-    else:
-        checksum.close()
-        messagebox.showerror("integrity error", "File data is corrupted.")
+    if hashlib.sha256(checksum.read()).hexdigest() != "12bdf35b71859772fb1b2b8ce758b25d0bec6d97f985d347df574a547c2dfd51":
+        messagebox.showerror("Integrity error", "File data is corrupted.")
         exit()
 
 
@@ -29,12 +26,17 @@ def  ResetScreen():
     b2.pack_forget()
     b3.pack_forget()
     b4.pack_forget()
+    b5.pack_forget()
     l1.pack_forget()
     l2.pack_forget()
     l3.pack_forget()
     l4.pack_forget()
     l5.place_forget()
     l6.pack_forget()
+    l7.place_forget()
+    l7_b.place_forget()
+    l8.place_forget()
+    l9.place_forget()
     rb1_1.place_forget()
     rb1_2.place_forget()
     e1.place_forget()
@@ -71,6 +73,7 @@ def NumCheck():
     elif int(e1.get()) > 1900 and rvar1.get() == 1:
         e1.delete(first=0,last=tk.END)
         e1.insert(index=tk.END, string="1900")
+        return False
 
 def isOk(num, diff):
     if num == "":
@@ -95,18 +98,23 @@ def isOk(num, diff):
         return False
     return True
 
-executor = conc_futures.ThreadPoolExecutor(max_workers=2, thread_name_prefix="thread")
+
 
 def StartScreen():
-    executor.submit(StartFunc1)
-    executor.submit(StartFunc2)
+    global tnum
+    t[tnum] = th.Thread(target=StartFunc1)
+    t[tnum].setDaemon(True)
+    t[tnum].start()
+    tnum += 1
+    t[tnum] = th.Thread(target=StartFunc2)
+    t[tnum].setDaemon(True)
+    t[tnum].start()
+    tnum += 1
 
 def StartFunc1():
-    time.sleep(1)
-    lvar1.set("2")
-    time.sleep(1)
-    lvar1.set("1")
-    time.sleep(1)
+    for i in reversed(range(1, 4)):
+        lvar1.set(i)
+        time.sleep(1)
 
 def StartFunc2():
     ResetScreen()
@@ -117,31 +125,63 @@ def StartFunc2():
 
 
 def GameStart():
-    executor.submit(MainGame1)
-    executor.submit(Stopwatch)
+    global tnum
+    global found
+    global stop
+    t[tnum] = th.Thread(target=MainGame1)
+    t[tnum].setDaemon(True)
+    t[tnum].start()
+    tnum += 1
+    t[tnum] = th.Thread(target=MainGame2)
+    t[tnum].setDaemon(True)
+    t[tnum].start()
+    tnum += 1
+    t[tnum-2].join()
+    t[tnum-1].join()
+    found = True
+    stop = False
 
 def MainGame1():
-    while end == False:
-        i = 0
-        r = random.randrange(3)
-        word_r = lines[r]
+    global stop
+    global found
+    for i in random.sample(lines, w_len):
+        lvar3.set("")
+        j = 0
+        word_r = i.split(",")
         word_r_len = len(word_r[0])
-
-        while i < word_r_len:
+        lvar3_b.set(word_r[0])
+        lvar4.set(word_r[1])
+        while j < word_r_len:
             t = str(keyboard.read_event())
-
+            if stop:break
             try:
                 search = re.search(pattern, t, flags=re.IGNORECASE).group()
             except AttributeError:          
                 search = ""
-        
-            if search == word_r[i]:
+            print(search)
+            if search == word_r[0][j]:
+                lvar3.set(str(lvar3.get())+word_r[0][j])
+                j += 1
+                l7_b.place_forget()
+                l7_b.place(x=0, y=240, anchor="w")
+                l7.place_forget()
+                l7.place(x=0, y=240, anchor="w")
+        if stop:break
+        l9.place(x=320, y=240, anchor="center")
+        time.sleep(0.8)
+        l9.place_forget()
 
-                i += 1
 
-def Stopwatch():
+def MainGame2():
+    global stop
+    global found
     StartTime = time.time()
-    while Stop == False:
+    b5.pack(side="bottom", anchor="se")
+    l7.place(x=0, y=240, anchor="w")
+    l7_b.place(x=0, y=240, anchor="w")
+    l8.place(x=640, y=240, anchor="e")
+
+    while stop == False:
         CurrentTime = time.time()
         DispTime = round(CurrentTime - StartTime, 2)
         if DispTime >= 100:
@@ -151,19 +191,27 @@ def Stopwatch():
         else:
             lvar2.set(str(DispTime).ljust(4,"0")+" sec")
         watch.pack(anchor='nw')
+    watch.pack_forget()
+
+
+def ForcedReturn():
+    global stop
+    stop = True
+    TitleScreen()
 
 
 with open("1400-test.txt", "r", encoding="utf-8") as f:
 	originlines = f.readlines()
 
 lines = list(map(lambda s:s.rstrip("\n"), originlines))
-
+w_len = len(lines)
 pattern = "(?<=KeyboardEvent\().*(?= down\))"
 search = ""
-
-end = False
-StartFlag = False
-Stop = False
+found = True
+stop = False
+startflag = False
+t = dict()
+tnum = 0
 
 
 root = Tk()
@@ -195,23 +243,25 @@ e1 = ttk.Entry(root, justify="right", validate="key", validatecommand=(tcl_Valid
 b3 = ttk.Button(root, text="Start!", style="light.TButton", padding=[10, 5], command=StartScreen)
 b4 = ttk.Button(root, text="Return", style="light.TButton", padding=[10, 5], command=TitleScreen)
 
-lvar1 = tk.StringVar(root, value="3")
+lvar1 = tk.StringVar(root)
 l6 = ttk.Label(root, textvariable=lvar1, font=("Arial", 120))
 
 
 lvar2 = tk.StringVar(root, value="0.000 sec")
 lvar3 = tk.StringVar(root)
+lvar3_b = tk.StringVar(root)
 lvar4 = tk.StringVar(root)
 watch = ttk.Label(root, textvariable=lvar2, font=("Arial", 20), padding=[5, 5])
+l7_b = ttk.Label(root, textvariable=lvar3_b, font=("Arial", 20), padding=[5, 5], foreground="#808080")
 l7 = ttk.Label(root, textvariable=lvar3, font=("Arial", 20), padding=[5, 5])
 l8 = ttk.Label(root, textvariable=lvar4, font=("Arial", 20), padding=[5, 5])
+l9 = ttk.Label(root, text="〇", font=("Yu Gothic UI", 200), foreground="#ff0000")
+b5 = ttk.Button(root, text="exit", style="light.TButton", padding=[10, 5], command=ForcedReturn)
 
 
-if StartFlag == False:
+if startflag == False:
     TitleScreen()
-    StartFlag = True
+    startflag = True
 
 
 root.mainloop()
-
-os.kill(os.getpid(), 9)

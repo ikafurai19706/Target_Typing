@@ -42,7 +42,7 @@ brain,脳
 mind,心、精神
 language,言語
 thought,考え
-knowlegde,知識
+knowledge,知識
 skill,技術、技能
 technology,科学技術
 culture,文化
