@@ -5,6 +5,8 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from PIL import Image, ImageFont, ImageDraw
+import pyautogui
 
 
 with open("1400-test.txt", "rb") as checksum:
@@ -27,14 +29,15 @@ def  ResetScreen():
     b3.pack_forget()
     b4.pack_forget()
     b5.pack_forget()
+    c1.delete(bg_text)
+    c1.delete(fg_text)
+    c1.place_forget()
     l1.pack_forget()
     l2.pack_forget()
     l3.pack_forget()
     l4.pack_forget()
     l5.place_forget()
     l6.pack_forget()
-    l7.place_forget()
-    l7_b.place_forget()
     l8.place_forget()
     l9.place_forget()
     rb1_1.place_forget()
@@ -50,7 +53,7 @@ def TitleScreen():
     b2.pack(side="bottom")
     l1.pack(pady=100)
 
-
+    
 def PreGame():
     ResetScreen()
     l2.pack(pady=10)
@@ -136,20 +139,29 @@ def GameStart():
     t[tnum].setDaemon(True)
     t[tnum].start()
     tnum += 1
-    t[tnum-2].join()
     t[tnum-1].join()
+    pyautogui.press("enter")
+    t[tnum-2].join()
     found = True
     stop = False
 
 def MainGame1():
     global stop
     global found
+    global bg_text
+    global fg_text
+    c1.place(x=320,y=180, anchor="center")
     for i in random.sample(lines, w_len):
+        fg_text = c1.create_text(0, 0, text="")
         lvar3.set("")
         j = 0
         word_r = i.split(",")
         word_r_len = len(word_r[0])
         lvar3_b.set(word_r[0])
+        w, h = draw.textsize(word_r[0], font)
+        print(w, h)
+        bg_text = c1.create_text(320, 25, text=lvar3_b.get(), anchor="center", font=("MS Gothic", 20), fill="gray")
+        fg_w = 320 - (w/1.7)
         lvar4.set(word_r[1])
         while j < word_r_len:
             t = str(keyboard.read_event())
@@ -162,14 +174,14 @@ def MainGame1():
             if search == word_r[0][j]:
                 lvar3.set(str(lvar3.get())+word_r[0][j])
                 j += 1
-                l7_b.place_forget()
-                l7_b.place(x=0, y=240, anchor="w")
-                l7.place_forget()
-                l7.place(x=0, y=240, anchor="w")
+                c1.delete(fg_text)
+                fg_text = c1.create_text(fg_w, 25, text=lvar3.get(), anchor="w", font=("MS Gothic", 20))
         if stop:break
         l9.place(x=320, y=240, anchor="center")
         time.sleep(0.8)
         l9.place_forget()
+        c1.delete(bg_text)
+        c1.delete(fg_text)
 
 
 def MainGame2():
@@ -177,9 +189,7 @@ def MainGame2():
     global found
     StartTime = time.time()
     b5.pack(side="bottom", anchor="se")
-    l7.place(x=0, y=240, anchor="w")
-    l7_b.place(x=0, y=240, anchor="w")
-    l8.place(x=640, y=240, anchor="e")
+    l8.place(x=320, y=240, anchor="center")
 
     while stop == False:
         CurrentTime = time.time()
@@ -212,6 +222,10 @@ stop = False
 startflag = False
 t = dict()
 tnum = 0
+font = ImageFont.truetype("C:/Windows/Fonts/msgothic.ttc", 24)
+img = Image.new("RGB", (300, 50), (0,0, 0))
+draw = ImageDraw.Draw(img)
+
 
 
 root = Tk()
@@ -252,11 +266,12 @@ lvar3 = tk.StringVar(root)
 lvar3_b = tk.StringVar(root)
 lvar4 = tk.StringVar(root)
 watch = ttk.Label(root, textvariable=lvar2, font=("Arial", 20), padding=[5, 5])
-l7_b = ttk.Label(root, textvariable=lvar3_b, font=("Arial", 20), padding=[5, 5], foreground="#808080")
-l7 = ttk.Label(root, textvariable=lvar3, font=("Arial", 20), padding=[5, 5])
 l8 = ttk.Label(root, textvariable=lvar4, font=("Arial", 20), padding=[5, 5])
-l9 = ttk.Label(root, text="〇", font=("Yu Gothic UI", 200), foreground="#ff0000")
 b5 = ttk.Button(root, text="exit", style="light.TButton", padding=[10, 5], command=ForcedReturn)
+c1 = tk.Canvas(root, width=640, height=50, bg="#f0f0f0")
+bg_text = c1.create_text(0, 0, text="")
+fg_text = c1.create_text(0, 0, text="")
+l9 = ttk.Label(root, text="〇", font=("Yu Gothic UI", 200,"bold"), foreground="#ff0000")
 
 
 if startflag == False:
