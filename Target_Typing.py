@@ -40,6 +40,7 @@ def  ResetScreen():
     l6.pack_forget()
     l8.place_forget()
     l9.place_forget()
+    l10.place_forget()
     rb1_1.place_forget()
     rb1_2.place_forget()
     e1.place_forget()
@@ -86,11 +87,6 @@ def isOk(num, diff):
     if not re.match(re.compile("[0-9]+"), diff):
         root.bell()
         return False
-    if int(num) == 0:
-        e1.delete(first=0,last=tk.END)
-        e1.insert(index=tk.END, string="1")
-        root.bell()
-        return False
     if int(num) > 200 and rvar1.get() == 0:
         e1.delete(first=0,last=tk.END)
         e1.insert(index=tk.END, string="200")
@@ -104,6 +100,9 @@ def isOk(num, diff):
 
 
 def StartScreen():
+    if int(e1.get()) == 0:
+        root.bell()
+        return
     global tnum
     t[tnum] = th.Thread(target=StartFunc1)
     t[tnum].setDaemon(True)
@@ -150,6 +149,10 @@ def MainGame1():
     global found
     global bg_text
     global fg_text
+    global typing
+    typing =True
+    lvar5.set(1)
+    l10.place(x=0, y=240, anchor="w")
     c1.place(x=320,y=180, anchor="center")
     for i in random.sample(lines, w_len):
         fg_text = c1.create_text(0, 0, text="")
@@ -178,29 +181,41 @@ def MainGame1():
                 fg_text = c1.create_text(fg_w, 25, text=lvar3.get(), anchor="w", font=("MS Gothic", 20))
         if stop:break
         l9.place(x=320, y=240, anchor="center")
+        typing = False
         time.sleep(0.8)
+        if lvar5.get() == int(e1.get()):
+            ForcedReturn()
+            break
         l9.place_forget()
         c1.delete(bg_text)
         c1.delete(fg_text)
+        lvar5.set(lvar5.get()+1)
+        typing = True
+        
 
 
 def MainGame2():
     global stop
     global found
-    StartTime = time.time()
+    global typing
+    tempTime = 0
     b5.pack(side="bottom", anchor="se")
     l8.place(x=320, y=240, anchor="center")
-
-    while stop == False:
-        CurrentTime = time.time()
-        DispTime = round(CurrentTime - StartTime, 2)
-        if DispTime >= 100:
-            lvar2.set(str(DispTime).ljust(6,"0")+" sec")
-        elif DispTime >= 10:
-            lvar2.set(str(DispTime).ljust(5,"0")+" sec")
-        else:
-            lvar2.set(str(DispTime).ljust(4,"0")+" sec")
-        watch.pack(anchor='nw')
+    watch.pack(anchor='nw')
+    while not stop:
+        while not typing:
+            time.sleep(0.1)
+        startTime = time.time()
+        while typing:
+            currentTime = time.time()
+            dispTime = round(currentTime - startTime + tempTime, 2)
+            if dispTime >= 100:
+                lvar2.set(str(dispTime).ljust(6,"0")+" sec")
+            elif dispTime >= 10:
+                lvar2.set(str(dispTime).ljust(5,"0")+" sec")
+            else:
+                lvar2.set(str(dispTime).ljust(4,"0")+" sec")
+        tempTime = dispTime
     watch.pack_forget()
 
 
@@ -219,6 +234,7 @@ pattern = "(?<=KeyboardEvent\().*(?= down\))"
 search = ""
 found = True
 stop = False
+typing = False
 startflag = False
 t = dict()
 tnum = 0
@@ -265,6 +281,7 @@ lvar2 = tk.StringVar(root, value="0.000 sec")
 lvar3 = tk.StringVar(root)
 lvar3_b = tk.StringVar(root)
 lvar4 = tk.StringVar(root)
+lvar5 = tk.IntVar(root, value=0)
 watch = ttk.Label(root, textvariable=lvar2, font=("Arial", 20), padding=[5, 5])
 l8 = ttk.Label(root, textvariable=lvar4, font=("Arial", 20), padding=[5, 5])
 b5 = ttk.Button(root, text="exit", style="light.TButton", padding=[10, 5], command=ForcedReturn)
@@ -272,6 +289,7 @@ c1 = tk.Canvas(root, width=640, height=50, bg="#f0f0f0")
 bg_text = c1.create_text(0, 0, text="")
 fg_text = c1.create_text(0, 0, text="")
 l9 = ttk.Label(root, text="〇", font=("Yu Gothic UI", 200,"bold"), foreground="#ff0000")
+l10 = ttk.Label(root, textvariable=lvar5, font=("Arial", 20), padding=[5, 5])
 
 
 if startflag == False:
