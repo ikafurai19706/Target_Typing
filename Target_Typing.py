@@ -12,7 +12,7 @@ import pyautogui
 with open("1400-test.txt", "rb") as checksum:
     if hashlib.sha256(checksum.read()).hexdigest() != "12bdf35b71859772fb1b2b8ce758b25d0bec6d97f985d347df574a547c2dfd51":
         messagebox.showerror("Integrity error", "File data is corrupted.")
-        exit()
+        sys.exit()
 
 
 def DisplayPos():
@@ -224,6 +224,9 @@ def ForcedReturn():
     stop = True
     TitleScreen()
 
+def Quit():
+    sys.exit()
+
 
 with open("1400-test.txt", "r", encoding="utf-8") as f:
 	originlines = f.readlines()
@@ -256,7 +259,7 @@ style.configure("light.TFrame", background="#2f4f4f")
 style.configure("light.TButton", font=("Yu Gothic UI", 12))
 style.configure("light.TRadiobutton", font=("Yu Gothic UI", 12))
 
-b1 = ttk.Button(root, text="Quit", style="light.TButton", padding=[15, 10], command=exit)
+b1 = ttk.Button(root, text="Quit", style="light.TButton", padding=[15, 10], command=Quit)
 b2 = ttk.Button(root, text="Start", style="light.TButton", padding=[15, 10], command=PreGame)
 l1 = ttk.Label(root, text="Target Typing!", relief="ridge", font=("Times New Roman", 40), padding=[15], foreground="#4169e1", background="#f0f8ff")
 
