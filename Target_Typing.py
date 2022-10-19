@@ -10,7 +10,7 @@ import pyautogui
 
 
 with open("1400-test.txt", "rb") as checksum:
-    if hashlib.sha256(checksum.read()).hexdigest() != "12bdf35b71859772fb1b2b8ce758b25d0bec6d97f985d347df574a547c2dfd51":
+    if hashlib.md5(checksum.read()).hexdigest() != "4c8e5ddbcda1bf1072945106ceaa2a19":
         messagebox.showerror("Integrity error", "File data is corrupted.")
         sys.exit()
 
