@@ -13,6 +13,10 @@ with open("1400-test.txt", "rb") as checksum:
     if hashlib.md5(checksum.read()).hexdigest() != "4c8e5ddbcda1bf1072945106ceaa2a19":
         messagebox.showerror("Integrity error", "File data is corrupted.")
         sys.exit()
+with open("1900.txt", "rb") as checksum:
+    if hashlib.md5(checksum.read()).hexdigest() != "1f129ef0fc9d12f725eec6a7d79ea05c":
+        messagebox.showerror("Integrity error", "File data is corrupted.")
+        sys.exit()
 
 
 def DisplayPos():
