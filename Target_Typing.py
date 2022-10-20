@@ -103,37 +103,36 @@ def StartScreen():
     if int(e1.get()) == 0:
         root.bell()
         return
+    global lines
+    global w_len
     global originlines
     global tnum
-    if rvar1 == 0:
+    if rvar1.get() == 0:
         with open("1400-test.txt", "r", encoding="utf-8") as f:
             originlines = f.readlines()
-    elif rvar1 == 1:
+    elif rvar1.get() == 1:
         with open("1900.txt", "r", encoding="utf-8") as f:
             originlines = f.readlines()
+    lines = list(map(lambda s:s.rstrip("\n"), originlines))
+    w_len = len(lines)
     t[tnum] = th.Thread(target=StartFunc1)
     t[tnum].setDaemon(True)
     t[tnum].start()
     tnum += 1
 
 def StartFunc1():
+    global running
+    if running:return
+    running = True
     global tnum
+    global found
+    global stop
     ResetScreen()
     l6.place(x=320, y=240, anchor="center")
     for i in reversed(range(1, 4)):
         lvar1.set(i)
         time.sleep(1)
     l6.place_forget()
-    t[tnum] = th.Thread(target=GameStart)
-    t[tnum].setDaemon(True)
-    t[tnum].start()
-    tnum += 1
-
-
-def GameStart():
-    global tnum
-    global found
-    global stop
     t[tnum] = th.Thread(target=MainGame1)
     t[tnum].setDaemon(True)
     t[tnum].start()
@@ -145,9 +144,10 @@ def GameStart():
     while not stop:
         time.sleep(0.5)
     pyautogui.press("enter")
-    t[tnum-2].join()
     found = True
     stop = False
+    running = False
+
 
 def MainGame1():
     global stop
@@ -234,8 +234,10 @@ def Quit():
     sys.exit()
 
 
-lines = list(map(lambda s:s.rstrip("\n"), originlines))
-w_len = len(lines)
+running = False
+lines = None
+w_len = None
+originlines = None
 pattern = "(?<=KeyboardEvent\().*(?= down\))"
 search = ""
 found = True
