@@ -1,6 +1,6 @@
-believe,を信じる、と思う
+believe,を信じる，と思う
 consider,を見なす
-expect,を予期する、と思う
+expect,を予期する，と思う
 decide,(を)決める
 allow,を許す
 remember,(を)覚えている
@@ -16,7 +16,7 @@ provide,を供給する
 increase,増える
 grow,成長する
 develop,を開発する
-rise,上がる、昇る
+rise,上がる，昇る
 raise,を上げる
 follow,(の)次に続く
 require,を要求する
@@ -27,40 +27,40 @@ face,に直面する
 touch,を感動させる
 store,を蓄える
 pay,(金)を支払う
-deal,(~ withで)に対処する、を扱う
+deal,〔~ withで〕に対処する，を扱う
 save,(時間・金銭など)を節約する
-happen,(事が)起こる《漠然的、または予想外の事象について》
-occur,(事が)起こる《具体的な事象、または丁寧な表現》
+happen,(事が)起こる (漠然的，または予想外の事象)
+occur,(事が)起こる (具体的な事象，または丁寧な表現)
 work,機能する
 change,を変える
 run,を経営する
 turn,の向きを変える
-return,戻る、帰る
+return,戻る，帰る
 stand,を我慢する
 lie,横たわる
 brain,脳
-mind,心、精神
+mind,心，精神
 language,言語
 thought,考え
-knowlegde,知識
-skill,技術、技能
+knowledge,知識
+skill,技術，技能
 technology,科学技術
 culture,文化
 experience,経験
 result,結果
 reason,理由
 cause,原因
-effect,影響、効果
+effect,影響，効果
 matter,問題
 sense,感覚
 way,方法
 term,期間
 situation,状況
 condition,状態
-position,(所定の)位置、場所
+position,(所定の)位置，場所
 environment,環境
 nature,自然
-research,研究、調査
+research,研究，調査
 rule,規則
 interest,興味
 value,価値
@@ -69,15 +69,15 @@ sound,音
 form,形状
 case,場合
 role,役割
-age,年齢、年
+age,年齢，年
 care,世話
 risk,危険(性)
 human,人間の
 free,自由な
-sure,確信して《主観的》
-certain,確信して《客観的》
-main,主要な《重要であること》
-major,主要な《より優れていること》
+sure,確信して (主観的)
+certain,確信して (客観的)
+main,主要な (重要であること)
+major,主要な (より優れていること)
 minor,重要でない
 clear,明らかな
 likely,ありそうな
@@ -91,31 +91,31 @@ specific,明確な
 particular,特別の
 individual,個人の
 unique,特有の
-rare,珍しい、まれな
-therefore,したがって、その結果
-thus,したがって《≒therefore》
-moreover,そのうえ、さらに《≒besides，furthermore》
-furthermore,そのうえ《≒besides，moreover》
-besides,そのうえ《≒moreover，furthermore》
+rare,珍しい，まれな
+therefore,したがって，その結果
+thus,したがって (≒therefore)
+moreover,そのうえ，さらに (≒besides，furthermore)
+furthermore,そのうえ (≒besides，moreover)
+besides,そのうえ (≒moreover，furthermore)
 nonetheless,それにもかかわらず
 notice,(に)気づく
-note,(に)注意する、注目する
+note,(に)注意する，注目する
 discover,を発見する
 realize,を(はっきりと)理解する
 recognize,をそれとわかる
 encourage,を励ます
 force,(人)に無理やり…させる
 order,を注文する
-affect,に影響する《≒influence》
+affect,に影響する (≒influence)
 offer,(人)に(物・事)を提供する
 demand,を要求する
-argue,と主張する《議論について》
-claim,を主張する《自身の意見の主張》
-object,反対する《≒oppose》
+argue,と主張する (議論について)
+claim,を主張する (自身の意見の主張)
+object,反対する (≒oppose)
 challenge,に異議を唱える
 involve,を巻き込む
-include,を含む《追加、構成要素、おまけ》
-contain,を含む《物体、情報の内容など》
+include,を含む (追加，構成要素，おまけ)
+contain,を含む (物体，情報の内容など)
 relate,を関連づける
 connect,をつなぐ
 refer,言及する
@@ -133,32 +133,32 @@ win,(に)勝つ
 lose,を失う
 fail,できない
 miss,に乗り遅れる
-lack,に欠けている、が不足している
+lack,に欠けている，が不足している
 reduce,を減らす
 avoid,を避ける
 limit,を制限する
 prevent,を妨げる
 wear,を身に着けている
-bear,を我慢する《≒stand》
+bear,を我慢する (≒stand)
 focus,を集中させる
-author,著者《≒writer》
+author,著者 (≒writer)
 professor,教授
 sentence,文
 passage,(文章の)一節
-message,伝言、メッセージ
+message,伝言，メッセージ
 statement,陳述
-topic,論題、話題
+topic,論題，話題
 article,記事
 issue,問題
 theory,理論
-evidence,証拠《≒proof》
+evidence,証拠 (≒proof)
 experiment,実験
 subject,(研究・話などの)主題
 government,政府
-policy,政策、方針
+policy,政策，方針
 education,教育
 company,会社
-colleague,同僚《≒coworker》
+colleague,同僚 (≒coworker)
 industry,産業
 trade,貿易
 economy,(国家などの)経済
@@ -185,11 +185,11 @@ normal,普通の
 familiar,よく知っている
 appropriate,適切な
 necessary,必要な
-correct,正しい《≒right》
-available,利用できる、入手できる
+correct,正しい (≒right)
+available,利用できる，入手できる
 typical,典型的な
 positive,積極的な
-negative,好ましくない、消極的な
+negative,好ましくない，消極的な
 passive,受動的な
 physical,身体の
 mental,精神の
@@ -214,8 +214,8 @@ communicate,意思を通じ合う
 respect,を尊敬する
 prefer,の方を好む
 design,を設計する
-establish,を設立する《≒found》
-found,を設立する《≒establish》
+establish,を設立する (≒found)
+found,を設立する (≒establish)
 publish,を出版する
 serve,(の)役に立つ
 supply,を供給する
@@ -233,7 +233,7 @@ advance,前進する
 tend,傾向がある
 depend,依存する
 exist,存在する
-decline,減る、衰える
+decline,減る，衰える
 decrease,減る
 waste,を浪費する
 damage,(物・体の一部)に損害を与える
@@ -242,25 +242,25 @@ act,行動する
 perform,を行う
 species,(生物の)種
 variety,多様(性)
-degree,程度《≒extent》
+degree,程度 (≒extent)
 range,範囲
-standard,水準、基準
+standard,水準，基準
 medium,(伝達などの)媒体
 advantage,有利な点
-task,(課された)任務、仕事
+task,(課された)任務，仕事
 rest,残り
 purpose,目的
 feature,特徴
-factor,要因、要素
+factor,要因，要素
 shape,形
-image,イメージ、印象
-datail,詳細(な情報)
-character,性格《≒personality》
+image,イメージ，印象
+detail,詳細(な情報)
+character,性格 (≒personality)
 function,機能
 structure,構造
 ground,地上
 influence,影響
-disease,病気《≒illness，sickness》
+disease,病気 (≒illness，sickness)
 pain,痛み
 medicine,薬
 death,死
@@ -399,7 +399,7 @@ seldom,
 lately,
 apart,
 trust,
-peomise,
+promise,
 predict,
 reflect,
 recall,
@@ -485,7 +485,7 @@ primary,
 worth,
 obvious,
 legal,
-commerical,
+commercial,
 artificial,
 chemical,
 biological,
@@ -599,12 +599,12 @@ constant,
 nearby,
 distant,
 insist,を断固要求する
-intend,を意図する、つもりでいる
+intend,を意図する，つもりでいる
 inspire,を奮起させる
-emphasize,を強調する、力説する
+emphasize,を強調する，力説する
 propose,を提案する
 persuade,を説得する
-convience,に納得[確信]させる
+convince,に納得[確信]させる
 admit,
 favor,
 excuse,
@@ -808,7 +808,7 @@ acknowledge,
 impress,
 urge,
 convey,
-celebreate,
+celebrate,
 admire,
 devote,
 dominate,
@@ -931,7 +931,7 @@ defeat,
 neglect,
 retire,
 reform,
-collapase,
+collapse,
 ruin,
 sink,
 pile,
@@ -947,7 +947,7 @@ sum,
 frame,
 boundary,
 district,
-territoty,
+territory,
 square,
 empire,
 heritage,
@@ -1060,7 +1060,7 @@ valley,
 conservation,
 channel,
 glacier,
-pionner,
+pioneer,
 prospect,
 enthusiasm,
 passion,
@@ -1109,7 +1109,7 @@ grasp,
 grip,
 seize,
 comprehend,
-constitude,
+constitute,
 reinforce,
 resort,
 donate,
@@ -1146,7 +1146,7 @@ ecology,
 inhabitant,
 suburb,
 furniture,
-refrigenerator,
+refrigerator,
 garbage,
 trash,
 litter,
@@ -1250,7 +1250,7 @@ lightning,
 dawn,
 astronomy,
 statistics,
-dimention,
+dimension,
 faculty,
 scheme,
 viewpoint,
@@ -1296,8 +1296,8 @@ gradual,
 loose,
 bitter,
 mild,
-dence,
-tence,
+dense,
+tense,
 conceive,
 confess,
 conform,
@@ -1381,7 +1381,7 @@ vacant,
 bare,
 naked,
 obscure,
-perculiar,
+peculiar,
 tidy,
 minute,
 vague,

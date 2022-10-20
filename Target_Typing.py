@@ -1,6 +1,6 @@
 # coding: utf-8
 import threading as th
-import hashlib, time, re, random, sys, os, keyboard
+import hashlib, time, re, random, sys, keyboard
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
@@ -103,27 +103,31 @@ def StartScreen():
     if int(e1.get()) == 0:
         root.bell()
         return
+    global originlines
     global tnum
+    if rvar1 == 0:
+        with open("1400-test.txt", "r", encoding="utf-8") as f:
+            originlines = f.readlines()
+    elif rvar1 == 1:
+        with open("1900.txt", "r", encoding="utf-8") as f:
+            originlines = f.readlines()
     t[tnum] = th.Thread(target=StartFunc1)
-    t[tnum].setDaemon(True)
-    t[tnum].start()
-    tnum += 1
-    t[tnum] = th.Thread(target=StartFunc2)
     t[tnum].setDaemon(True)
     t[tnum].start()
     tnum += 1
 
 def StartFunc1():
+    global tnum
+    ResetScreen()
+    l6.place(x=320, y=240, anchor="center")
     for i in reversed(range(1, 4)):
         lvar1.set(i)
         time.sleep(1)
-
-def StartFunc2():
-    ResetScreen()
-    l6.place(x=320, y=240, anchor="center")
-    time.sleep(3)
     l6.place_forget()
-    GameStart()
+    t[tnum] = th.Thread(target=GameStart)
+    t[tnum].setDaemon(True)
+    t[tnum].start()
+    tnum += 1
 
 
 def GameStart():
@@ -138,7 +142,8 @@ def GameStart():
     t[tnum].setDaemon(True)
     t[tnum].start()
     tnum += 1
-    t[tnum-1].join()
+    while not stop:
+        time.sleep(0.5)
     pyautogui.press("enter")
     t[tnum-2].join()
     found = True
@@ -146,11 +151,10 @@ def GameStart():
 
 def MainGame1():
     global stop
-    global found
     global bg_text
     global fg_text
     global typing
-    typing =True
+    typing = True
     lvar5.set(1)
     l10.place(x=0, y=240, anchor="w")
     c1.place(x=320,y=180, anchor="center")
@@ -204,9 +208,11 @@ def MainGame2():
     watch.pack(anchor='nw')
     while not stop:
         while not typing:
+            if stop:break
             time.sleep(0.1)
         startTime = time.time()
         while typing:
+            if stop:break
             currentTime = time.time()
             dispTime = round(currentTime - startTime + tempTime, 2)
             if dispTime >= 100:
@@ -227,9 +233,6 @@ def ForcedReturn():
 def Quit():
     sys.exit()
 
-
-with open("1400-test.txt", "r", encoding="utf-8") as f:
-	originlines = f.readlines()
 
 lines = list(map(lambda s:s.rstrip("\n"), originlines))
 w_len = len(lines)
