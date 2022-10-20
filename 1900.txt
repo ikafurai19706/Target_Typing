@@ -1852,7 +1852,7 @@ eclipse,(日食・月食などの)食
 basin,流域
 erosion,浸食
 archaeology,考古学
-errand,(人の)使い，使い走り
+errand,(人の)使い，使い走
 mercy,慈悲
 rhetoric,修辞(法)
 verse,韻文
