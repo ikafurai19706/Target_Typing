@@ -270,7 +270,7 @@ style.configure("light.TRadiobutton", font=("Yu Gothic UI", 12))
 
 b1 = ttk.Button(root, text="Quit", style="light.TButton", padding=[15, 10], command=Quit)
 b2 = ttk.Button(root, text="Start", style="light.TButton", padding=[15, 10], command=PreGame)
-l1 = ttk.Label(root, text="Target Typing!", relief="ridge", font=("Times New Roman", 40), padding=[15], foreground="#4169e1", background="#f0f8ff")
+l1 = ttk.Label(root, text="Target Typing!", relief="ridge", font=("Times New Roman", 40), padding=[15], foreground="#19448e", background="#b0c4de")
 
 l2 = ttk.Label(root, text="Game Settings", font=("Times New Roman", 30), padding=[10], foreground="#191970")
 l3 = ttk.Label(root, text="Types of vocabulary books", font=("Arial", 20))
