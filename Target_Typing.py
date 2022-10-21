@@ -27,7 +27,7 @@ def DisplayPos():
     return "640x480+"+str(W_width)+"+"+str(W_height)
 
 
-def  ResetScreen():
+def ResetScreen():
     b1.pack_forget()
     b2.pack_forget()
     b3.pack_forget()
