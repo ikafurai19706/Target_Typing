@@ -31,6 +31,8 @@ def ResetScreen():
     optionL2.pack_forget()
     optionL3.pack_forget()
     optionL4.place_forget()
+    optionL5.pack_forget()
+    optionL6.place_forget()
     countdownL.pack_forget()
     meaningL.place_forget()
     circleL.place_forget()
@@ -63,11 +65,12 @@ def PreGame():
     amountE.place(x=390, y=240, anchor="center")
     if amountE.get() == "":
         amountE.insert(index="end", string="10")
-    optionL6.place(x=320, y=360, anchor="center")
-    rangefE.place(x=400, y=360, anchor="center")
+    optionL5.pack()
+    optionL6.place(x=320, y=320, anchor="center")
+    rangefE.place(x=240, y=320, anchor="center")
     if rangefE.get() == "":
         rangefE.insert(index="end", string="1")
-    rangelE.place(x=240, y=360, anchor="center")
+    rangelE.place(x=400, y=320, anchor="center")
     if rangelE.get() == "":
         rangelE.insert(index="end", string="10")
     startB.pack(side="right", anchor="se", padx=5, pady=5)
@@ -77,34 +80,79 @@ def NumCheck():
     if int(amountE.get()) > 200 and booktype.get() == 0:
         amountE.delete(first=0, last="end")
         amountE.insert(index="end", string="200")
-        return False
     elif int(amountE.get()) > 1900 and booktype.get() == 1:
-        amountE.delete(first=0,last="end")
+        amountE.delete(first=0, last="end")
         amountE.insert(index="end", string="1900")
-        return False
+    if int(rangefE.get()) > 200 and booktype.get() == 0:
+        rangefE.delete(first=0, last="end")
+        rangefE.insert(index="end", string="200")
+    elif int(rangefE.get()) > 1900 and booktype.get() == 1:
+        rangefE.delete(first=0, last="end")
+        rangefE.insert(index="end", string="1900")
+    if int(rangelE.get()) > 200 and booktype.get() == 0:
+        rangelE.delete(first=0, last="end")
+        rangelE.insert(index="end", string="200")
+    elif int(rangelE.get()) > 1900 and booktype.get() == 1:
+        rangelE.delete(first=0, last="end")
+        rangelE.insert(index="end", string="1900")
 
 def isOk(num, diff):
     if num == "":
-        amountE.delete(first=0,last="end")
+        amountE.delete(first=0, last="end")
         amountE.insert(index="end", string="1")
         return False
     if not re.match(re.compile("[0-9]+"), diff):
         root.bell()
         return False
     if int(num) > 200 and booktype.get() == 0:
-        amountE.delete(first=0,last="end")
+        amountE.delete(first=0, last="end")
         amountE.insert(index="end", string="200")
         return False
     elif int(num) > 1900 and booktype.get() == 1:
-        amountE.delete(first=0,last="end")
+        amountE.delete(first=0, last="end")
         amountE.insert(index="end", string="1900")
         return False
     return True
 
+def isOk_rf(num, diff):
+    if num == "":
+        rangefE.delete(first=0, last="end")
+        rangefE.insert(index="end", string="1")
+        return False
+    if not re.match(re.compile("[0-9]+"), diff):
+        root.bell()
+        return False
+    if int(num) > 200 and booktype.get() == 0:
+        rangefE.delete(first=0, last="end")
+        rangefE.insert(index="end", string="200")
+        return False
+    elif int(num) > 1900 and booktype.get() == 1:
+        rangefE.delete(first=0, last="end")
+        rangefE.insert(index="end", string="1900")
+        return False
+    return True
+
+def isOk_rl(num, diff):
+    if num == "":
+        rangelE.delete(first=0, last="end")
+        rangelE.insert(index="end", string="1")
+        return False
+    if not re.match(re.compile("[0-9]+"), diff):
+        root.bell()
+        return False
+    if int(num) > 200 and booktype.get() == 0:
+        rangelE.delete(first=0, last="end")
+        rangelE.insert(index="end", string="200")
+        return False
+    elif int(num) > 1900 and booktype.get() == 1:
+        rangelE.delete(first=0, last="end")
+        rangelE.insert(index="end", string="1900")
+        return False
+    return True
 
 
 def StartScreen():
-    if int(amountE.get()) == 0:
+    if int(amountE.get()) == 0 or int(rangefE.get()) == 0 or int(rangelE.get()) == 0 or int(amountE.get()) > abs(int(rangefE.get()) - int(rangelE.get())) + 1:
         root.bell()
         return
     global lines
@@ -118,7 +166,8 @@ def StartScreen():
         with open("1900.txt", "r", encoding="utf-8") as f:
             originlines = f.readlines()
     lines = list(map(lambda s:s.rstrip("\n"), originlines))
-    w_len = len(lines)
+    print(lines)
+    w_len = int(amountE.get())
     t[tnum] = th.Thread(target=StartFunc1)
     t[tnum].setDaemon(True)
     t[tnum].start()
@@ -162,7 +211,11 @@ def MainGame1():
     qamtI.set(1)
     qamtL.place(x=0, y=240, anchor="w")
     wordC1.place(x=320,y=180, anchor="center")
-    for i in random.sample(lines, w_len):
+    if int(rangefE.get()) <= int(rangelE.get()):
+        rf, rl = int(rangefE.get()), int(rangelE.get())
+    else:
+        rf, rl = int(rangelE.get()), int(rangefE.get())
+    for i in random.sample(lines[rf-1:rl], w_len):
         qamtS.set(str(qamtI.get()) + "/" + str(amountE.get()))
         fg_text = wordC1.create_text(0, 0, text="")
         word_fg.set("")
@@ -272,16 +325,18 @@ optionL1 = ttk.Label(root, text="Game Settings", font=("Times New Roman", 30), p
 optionL2 = ttk.Label(root, text="Types of vocabulary books", font=("Arial", 20))
 optionL3 = ttk.Label(root, text="Amount of questions", font=("Arial", 20))
 optionL4 = ttk.Label(root, text="Enter any number", font=("Yu Gothic UI", 12))
-optionL5 = ttk.Label(root, text="Test range", font=("Arial", 20))
-optionL6 = ttk.Label(root, text="～", font=("Yu Gothic UI", 12))
+optionL5 = ttk.Label(root, text="Exam coverage", font=("Arial", 20))
+optionL6 = ttk.Label(root, text="～", font=("Yu Gothic UI", 15))
 optionF1 = ttk.Frame(root, width=540, height=4, style="light.TFrame")
 booktype = tk.IntVar(root, value=0)
 booktypeRB0 = ttk.Radiobutton(root, text="Target-1400 (test)", style="light.TRadiobutton", value=0, variable=booktype, command=NumCheck)
 booktypeRB1 = ttk.Radiobutton(root, text="Target-1900", style="light.TRadiobutton", value=1, variable=booktype, state="", command=NumCheck)
 tcl_Validate = root.register(isOk)
-amountE = ttk.Entry(root, justify="right", validate="key", validatecommand=(tcl_Validate, "%P","%S"))
-rangefE = ttk.Entry(root, justify="right", validate="key", validatecommand=(tcl_Validate, "%P","%S"))
-rangelE = ttk.Entry(root, justify="right", validate="key", validatecommand=(tcl_Validate, "%P","%S"))
+tcl_Validate_rf = root.register(isOk_rf)
+tcl_Validate_rl = root.register(isOk_rl)
+amountE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate, "%P","%S"))
+rangefE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate_rf, "%P","%S"))
+rangelE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate_rl, "%P","%S"))
 startB = ttk.Button(root, text="Start!", style="light.TButton", padding=[10, 5], command=StartScreen)
 returnB = ttk.Button(root, text="Return", style="light.TButton", padding=[10, 5], command=TitleScreen)
 
