@@ -38,6 +38,8 @@ def ResetScreen():
     booktypeRB0.place_forget()
     booktypeRB1.place_forget()
     amountE.place_forget()
+    rangefE.place_forget()
+    rangelE.place_forget()
     optionF1.pack_forget()
     watchL.pack_forget()
     
@@ -61,6 +63,13 @@ def PreGame():
     amountE.place(x=390, y=240, anchor="center")
     if amountE.get() == "":
         amountE.insert(index="end", string="10")
+    optionL6.place(x=320, y=360, anchor="center")
+    rangefE.place(x=400, y=360, anchor="center")
+    if rangefE.get() == "":
+        rangefE.insert(index="end", string="1")
+    rangelE.place(x=240, y=360, anchor="center")
+    if rangelE.get() == "":
+        rangelE.insert(index="end", string="10")
     startB.pack(side="right", anchor="se", padx=5, pady=5)
     returnB.pack(side="right", anchor="se", padx=5, pady=5)
 
@@ -264,13 +273,15 @@ optionL2 = ttk.Label(root, text="Types of vocabulary books", font=("Arial", 20))
 optionL3 = ttk.Label(root, text="Amount of questions", font=("Arial", 20))
 optionL4 = ttk.Label(root, text="Enter any number", font=("Yu Gothic UI", 12))
 optionL5 = ttk.Label(root, text="Test range", font=("Arial", 20))
-optionL6 = ttk.Label(root, text="Enter any number", font=("Yu Gothic UI", 12))
+optionL6 = ttk.Label(root, text="～", font=("Yu Gothic UI", 12))
 optionF1 = ttk.Frame(root, width=540, height=4, style="light.TFrame")
 booktype = tk.IntVar(root, value=0)
 booktypeRB0 = ttk.Radiobutton(root, text="Target-1400 (test)", style="light.TRadiobutton", value=0, variable=booktype, command=NumCheck)
 booktypeRB1 = ttk.Radiobutton(root, text="Target-1900", style="light.TRadiobutton", value=1, variable=booktype, state="", command=NumCheck)
 tcl_Validate = root.register(isOk)
 amountE = ttk.Entry(root, justify="right", validate="key", validatecommand=(tcl_Validate, "%P","%S"))
+rangefE = ttk.Entry(root, justify="right", validate="key", validatecommand=(tcl_Validate, "%P","%S"))
+rangelE = ttk.Entry(root, justify="right", validate="key", validatecommand=(tcl_Validate, "%P","%S"))
 startB = ttk.Button(root, text="Start!", style="light.TButton", padding=[10, 5], command=StartScreen)
 returnB = ttk.Button(root, text="Return", style="light.TButton", padding=[10, 5], command=TitleScreen)
 
