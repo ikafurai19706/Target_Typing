@@ -1,11 +1,17 @@
 # coding: utf-8
+import datetime
 import threading as th
 import tkinter as tk
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg as FCTkAgg
 import time, re, random, sys, keyboard, textwrap, pyautogui
 from tkinter import *
-from tkinter import ttk, messagebox
+from tkinter import ttk
+from tkinter import messagebox as msgbox
 from PIL import Image, ImageFont, ImageDraw
 from simpleaudio import WaveObject
+
 
 
 def DisplayPos():
@@ -32,6 +38,8 @@ def ResetScreen():
 	optionL4.place_forget()
 	optionL5.pack_forget()
 	optionL6.place_forget()
+	optionL7.pack_forget()
+	inOrderCB.place_forget()
 	countdownL.pack_forget()
 	meaningL.place_forget()
 	circleL.place_forget()
@@ -43,6 +51,17 @@ def ResetScreen():
 	rangelE.place_forget()
 	optionF1.pack_forget()
 	watchL.pack_forget()
+	rsltF1.pack_forget()
+	rsltF2.place_forget()
+	rsltF3.place_forget()
+	rsltF4.place_forget()
+	rsltL1.pack_forget()
+	rsltL2.place_forget()
+	rsltL3.place_forget()
+	rsltL4.place_forget()
+	cTimeL.place_forget()
+	accuL.place_forget()
+	kpmL.place_forget()
 	
 
 def TitleScreen():
@@ -61,11 +80,11 @@ def PreGame():
 	optionL1.pack(pady=3)
 	optionF1.pack(pady=5)
 	optionL2.pack(pady=5)
-	booktypeRB0.place(x=200, y=150, anchor="center")
-	booktypeRB1.place(x=440, y=150, anchor="center")
+	booktypeRB0.place(x=220, y=150, anchor="center")
+	booktypeRB1.place(x=420, y=150, anchor="center")
 	optionL3.pack(pady=40)
-	optionL4.place(x=250, y=230,anchor="center")
-	amountE.place(x=390, y=230, anchor="center")
+	optionL4.place(x=260, y=230,anchor="center")
+	amountE.place(x=400, y=230, anchor="center")
 	if amountE.get() == "":
 		amountE.insert(index="end", string="10")
 	optionL5.pack()
@@ -76,6 +95,8 @@ def PreGame():
 	rangelE.place(x=400, y=310, anchor="center")
 	if rangelE.get() == "":
 		rangelE.insert(index="end", string="10")
+	optionL7.pack(pady=40)
+	inOrderCB.place(x=200, y=380, anchor="center")
 	startB.pack(side="right", anchor="se", padx=5, pady=5)
 	returnB.pack(side="right", anchor="se", padx=5, pady=5)
 
@@ -165,7 +186,8 @@ def StartScreen():
 	else:
 		return
 	if BlankCheck():
-		messagebox.showerror("Error", "Invalid value entered.")
+		msgbox.showerror("Error", "Invalid value entered.")
+		pregame = True
 		return
 	global lines, w_len, originlines, tnum
 	if booktype.get() == 0:
@@ -210,8 +232,9 @@ def StartFunc1():
 
 
 def MainGame1():
-	global stop, bg_text, fg_text, typing
-	typing = True
+	global stop, bg_text, fg_text, typing, typeCnt, word_r
+	typeCnt = 0
+	missCnt = 0
 	qamtI.set(1)
 	qamtL.place(x=0, y=240, anchor="w")
 	wordC1.place(x=320,y=180, anchor="center")
@@ -219,8 +242,15 @@ def MainGame1():
 		rf, rl = int(rangefE.get()), int(rangelE.get())
 	else:
 		rf, rl = int(rangelE.get()), int(rangefE.get())
-	for i in random.sample(lines[rf-1:rl], w_len):
-		qamtS.set(str(qamtI.get()) + "/" + str(amountE.get()))
+	if inOrder.get():
+		quelist = lines[rf-1:rl]
+		amtE = len(quelist)
+	else:
+		quelist = random.sample(lines[rf-1:rl], w_len)
+		amtE = amountE.get()
+	typing = True
+	for i in quelist:
+		qamtS.set(str(qamtI.get()) + "/" + str(amtE))
 		fg_text = wordC1.create_text(0, 0, text="")
 		word_fg.set("")
 		j = 0
@@ -240,20 +270,29 @@ def MainGame1():
 			except AttributeError:          
 				search = ""
 			print(search)
-			if search == word_r[0][j]:
+			if search == "esc":
+				ForcedReturn()
+				break
+			elif search == word_r[0][j]:
 				word_fg.set(str(word_fg.get())+word_r[0][j])
 				j += 1
 				wordC1.delete(fg_text)
 				fg_text = wordC1.create_text(fg_w, 25, text=word_fg.get(), anchor="w", font=("MS Gothic", 20))
+				typeCnt += 1
 				sound_type.play()
 			elif search != "":
-				sound_miss.play()
+				missCnt += 1
+				try:
+					sound_miss.play()
+				except:
+					pass
 		if stop:break
 		circleL.place(x=320, y=240, anchor="center")
 		typing = False
 		time.sleep(0.8)
-		if qamtI.get() == int(amountE.get()):
-			ForcedReturn()
+		if qamtI.get() == int(amtE):
+			accu.set("{:.2%}".format(typeCnt / (typeCnt+missCnt)) + " (" + str(typeCnt) + "/" + str(typeCnt+missCnt) + ") ")
+			Result()
 			break
 		circleL.place_forget()
 		wordC1.delete(bg_text)
@@ -262,8 +301,10 @@ def MainGame1():
 		typing = True
 		
 
+
 def MainGame2():
-	global stop, found, typing
+	global dispTime, kpmList
+	kpmList = []
 	tempTime = 0
 	exitB.pack(side="bottom", anchor="se")
 	meaningL.place(x=320, y=220, anchor="n")
@@ -277,13 +318,37 @@ def MainGame2():
 			if stop:break
 			currentTime = time.time()
 			dispTime = round(currentTime - startTime + tempTime, 2)
-			watch.set(str(dispTime).ljust(len(str(int(dispTime)))+3,"0")+" sec")
+			watch.set(str(datetime.timedelta(seconds=dispTime))[2:10])
+		print(word_r[0], (currentTime - startTime)/60)
+		kpmList.append(round(len(word_r[0]) / ((currentTime - startTime)/60), 1))
+		print(kpmList)
 		tempTime = dispTime
+		cTime.set(watch.get())
 	watchL.pack_forget()
+	
+
+
+def Result():
+	global stop
+	stop = True
+	ResetScreen()
+	kpm.set(round(np.mean(kpmList), 1))
+	rsltL1.pack(pady=3)
+	rsltF1.pack(pady=5)
+	rsltL2.place(x=180, y=120, anchor="center")
+	rsltL3.place(x=460, y=120, anchor="center")
+	rsltL4.place(x=180, y=240, anchor="center")
+	rsltF2.place(x=180, y=145, anchor="center")
+	rsltF3.place(x=460, y=145, anchor="center")
+	rsltF4.place(x=180, y=265, anchor="center")
+	cTimeL.place(x=180, y=170, anchor="center")
+	accuL.place(x=460, y=170, anchor="center")
+	kpmL.place(x=180, y=290, anchor="center")
+	returnB.pack(side="right", anchor="se", padx=5, pady=5)
 
 
 def ForcedReturn():
-	global stop, pregame
+	global stop
 	stop = True
 	TitleScreen()
 
@@ -291,6 +356,7 @@ def Quit():
 	sys.exit()
 
 
+word_r = ""
 running = False
 pregame = False
 lines = None
@@ -309,7 +375,6 @@ img = Image.new("RGB", (300, 50), (0,0, 0))
 draw = ImageDraw.Draw(img)
 
 
-
 root = Tk()
 root.title("Target_Typing")
 root.geometry(DisplayPos())
@@ -321,6 +386,7 @@ style = ttk.Style()
 style.configure("light.TFrame", background="#2f4f4f")
 style.configure("light.TButton", font=("Yu Gothic UI", 12))
 style.configure("light.TRadiobutton", font=("Yu Gothic UI", 12))
+style.configure("light.TCheckbutton", font=("Yu Gothic UI", 12))
 
 quitB = ttk.Button(root, text="Quit", style="light.TButton", padding=[15, 10], command=Quit)
 titlestartB = ttk.Button(root, text="Start", style="light.TButton", padding=[15, 10], command=PreGame)
@@ -334,7 +400,7 @@ optionL5 = ttk.Label(root, text="Exam coverage", font=("Arial", 20))
 optionL6 = ttk.Label(root, text="～", font=("Yu Gothic UI", 15))
 optionL7 = ttk.Label(root, text="Others", font=("Arial", 20))
 optionF1 = ttk.Frame(root, width=540, height=4, style="light.TFrame")
-booktype = tk.IntVar(root, value=0)
+booktype = IntVar(root, value=0)
 booktypeRB0 = ttk.Radiobutton(root, text="Target-1400 (test)", style="light.TRadiobutton", value=0, variable=booktype, command=NumCheck)
 booktypeRB1 = ttk.Radiobutton(root, text="Target-1900", style="light.TRadiobutton", value=1, variable=booktype, state="", command=NumCheck)
 tcl_Validate = root.register(isOk)
@@ -343,29 +409,45 @@ tcl_Validate_rl = root.register(isOk_rl)
 amountE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate, "%P","%S"))
 rangefE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate_rf, "%P","%S"))
 rangelE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate_rl, "%P","%S"))
+inOrder = BooleanVar(root)
+inOrderCB = ttk.Checkbutton(root, text="Give questions in order", style="light.TCheckbutton", variable=inOrder)
 startB = ttk.Button(root, text="Start!", style="light.TButton", padding=[10, 5], command=StartScreen)
 returnB = ttk.Button(root, text="Return", style="light.TButton", padding=[10, 5], command=TitleScreen)
 
-countdown = tk.StringVar(root)
+countdown = StringVar(root)
 countdownL = ttk.Label(root, textvariable=countdown, font=("Arial", 120))
 
 sound_type = WaveObject.from_wave_file("sounds/type.wav")
 sound_miss = WaveObject.from_wave_file("sounds/miss.wav")
-watch = tk.StringVar(root, value="0.00 sec")
-word_fg = tk.StringVar(root)
-word_bg = tk.StringVar(root)
-meaning = tk.StringVar(root)
-qamtI = tk.IntVar(root)
-qamtS = tk.StringVar(root)
+watch = StringVar(root, value="00:00.00")
+word_fg = StringVar(root)
+word_bg = StringVar(root)
+meaning = StringVar(root)
+qamtI = IntVar(root)
+qamtS = StringVar(root)
 watchL = ttk.Label(root, textvariable=watch, font=("Arial", 20), padding=[5, 5])
 meaningL = ttk.Label(root, textvariable=meaning, font=("Arial", 20), padding=[5, 5])
 exitB = ttk.Button(root, text="exit", style="light.TButton", padding=[10, 5], command=ForcedReturn)
-wordC1 = tk.Canvas(root, width=640, height=50, bg="#f0f0f0")
+wordC1 = Canvas(root, width=640, height=50, bg="#f0f0f0")
 bg_text = wordC1.create_text(0, 0, text="")
 fg_text = wordC1.create_text(0, 0, text="")
 circleL = ttk.Label(root, text="〇", font=("Yu Gothic UI", 200,"bold"), foreground="#ff0000")
 qamtL = ttk.Label(root, textvariable=qamtS, font=("Arial", 20), padding=[5, 5])
 
+rsltL1 = ttk.Label(root, text="Result", font=("Times New Roman", 30), padding=[10], foreground="#191970")
+rsltL2 = ttk.Label(root, text="Clear time", font=("Arial", 20))
+rsltL3 = ttk.Label(root, text="Accuracy", font=("Arial", 20))
+rsltL4 = ttk.Label(root, text="Key Per Minute", font=("Arial", 20))
+rsltF1 = ttk.Frame(root, width=540, height=4, style="light.TFrame")
+rsltF2= ttk.Frame(root, width=200, height=2, style="light.TFrame")
+rsltF3 = ttk.Frame(root, width=200, height=2, style="light.TFrame")
+rsltF4 = ttk.Frame(root, width=200, height=2, style="light.TFrame")
+cTime = StringVar(root)
+cTimeL = ttk.Label(root, textvariable=cTime, font=("Yu Gothic UI", 18))
+accu = StringVar(root, value="0.00 %")
+accuL = ttk.Label(root, textvariable=accu, font=("Yu Gothic UI", 18))
+kpm = StringVar(root)
+kpmL = ttk.Label(root, textvariable=kpm, font=("Yu Gothic UI", 18))
 
 if startflag == False:
 	TitleScreen()
