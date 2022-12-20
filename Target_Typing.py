@@ -1,16 +1,14 @@
 # coding: utf-8
-import datetime
+import time, re, random, sys, keyboard, textwrap, pyautogui, math, datetime
 import threading as th
-import tkinter as tk
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg as FCTkAgg
-import time, re, random, sys, keyboard, textwrap, pyautogui
+import matplotlib.figure as Figure
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox as msgbox
 from PIL import Image, ImageFont, ImageDraw
 from simpleaudio import WaveObject
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg as FCTkAgg
 
 
 
@@ -62,6 +60,8 @@ def ResetScreen():
 	cTimeL.place_forget()
 	accuL.place_forget()
 	kpmL.place_forget()
+	figF.place_forget()
+	figC.get_tk_widget().pack_forget()
 	
 
 def TitleScreen():
@@ -180,7 +180,7 @@ def isOk_rl(num, diff):
 
 
 def StartScreen():
-	global pregame
+	global pregame, lines, w_len, originlines, tnum
 	if pregame:
 		pregame = False
 	else:
@@ -189,7 +189,6 @@ def StartScreen():
 		msgbox.showerror("Error", "Invalid value entered.")
 		pregame = True
 		return
-	global lines, w_len, originlines, tnum
 	if booktype.get() == 0:
 		with open("1400-test.txt", "r", encoding="utf-8") as f:
 			originlines = f.readlines()
@@ -205,7 +204,7 @@ def StartScreen():
 	tnum += 1
 
 def StartFunc1():
-	global running, tnum, found, stop
+	global running, tnum, stop
 	if running:
 		return
 	running = True
@@ -226,15 +225,18 @@ def StartFunc1():
 	while not stop:
 		time.sleep(0.5)
 	pyautogui.press("enter")
-	found = True
 	stop = False
 	running = False
 
 
 def MainGame1():
-	global stop, bg_text, fg_text, typing, typeCnt, word_r
-	typeCnt = 0
+	global stop, bg_text, fg_text, typing, word_r, accuList
+	typing = False
+	stop = False
+	accuList = []
 	missCnt = 0
+	typeCntAll = 0
+	missCntAll = 0
 	qamtI.set(1)
 	qamtL.place(x=0, y=240, anchor="w")
 	wordC1.place(x=320,y=180, anchor="center")
@@ -257,7 +259,7 @@ def MainGame1():
 		word_r = i.split(",")
 		word_r_len = len(word_r[0])
 		word_bg.set(word_r[0])
-		w, h = draw.textsize(word_r[0], font)
+		w, h = iDraw.textsize(word_r[0], font)
 		print(w, h)
 		bg_text = wordC1.create_text(320, 25, text=word_bg.get(), anchor="center", font=("MS Gothic", 20), fill="gray")
 		fg_w = 320 - (w/1.7)
@@ -278,7 +280,6 @@ def MainGame1():
 				j += 1
 				wordC1.delete(fg_text)
 				fg_text = wordC1.create_text(fg_w, 25, text=word_fg.get(), anchor="w", font=("MS Gothic", 20))
-				typeCnt += 1
 				sound_type.play()
 			elif search != "":
 				missCnt += 1
@@ -289,9 +290,16 @@ def MainGame1():
 		if stop:break
 		circleL.place(x=320, y=240, anchor="center")
 		typing = False
+		typeCntAll += len(word_r[0])
+		missCntAll += missCnt
+		accuList.append(round(len(word_r[0]) / (len(word_r[0]) + missCnt) * 100, 2))
+		print(accuList)
+		missCnt = 0
 		time.sleep(0.8)
 		if qamtI.get() == int(amtE):
-			accu.set("{:.2%}".format(typeCnt / (typeCnt+missCnt)) + " (" + str(typeCnt) + "/" + str(typeCnt+missCnt) + ") ")
+			accu.set("{:.2%}".format(typeCntAll / (typeCntAll + missCntAll)) + " (" + str(typeCntAll) + "/" + str(typeCntAll + missCntAll) + ") ")
+			kpm.set(round(typeCntAll / (dispTime / 60), 1))
+			print(typeCntAll, dispTime)
 			Result()
 			break
 		circleL.place_forget()
@@ -305,23 +313,25 @@ def MainGame1():
 def MainGame2():
 	global dispTime, kpmList
 	kpmList = []
+	watch.set("00:00.00")
 	tempTime = 0
 	exitB.pack(side="bottom", anchor="se")
 	meaningL.place(x=320, y=220, anchor="n")
 	watchL.pack(anchor='nw')
 	while not stop:
+		watchL.config(foreground="gray")
 		while not typing:
 			if stop:break
 			time.sleep(0.1)
+		time.sleep(0.2)
 		startTime = time.time()
+		watchL.config(foreground="black")
 		while typing:
 			if stop:break
 			currentTime = time.time()
 			dispTime = round(currentTime - startTime + tempTime, 2)
 			watch.set(str(datetime.timedelta(seconds=dispTime))[2:10])
-		print(word_r[0], (currentTime - startTime)/60)
 		kpmList.append(round(len(word_r[0]) / ((currentTime - startTime)/60), 1))
-		print(kpmList)
 		tempTime = dispTime
 		cTime.set(watch.get())
 	watchL.pack_forget()
@@ -332,19 +342,39 @@ def Result():
 	global stop
 	stop = True
 	ResetScreen()
-	kpm.set(round(np.mean(kpmList), 1))
+
+	fig.clear()
+	ax = fig.subplots(2)
+
+	ax[0].plot(accuList, marker="s")
+	ax[0].set_title("Accuracy")
+	ax[0].get_xaxis().set_visible(False)
+	ax[0].grid(axis="y")
+	ax[0].set_ylim(-5, 105)
+	ax[1].plot(kpmList, marker="s", color="forestgreen")
+	ax[1].set_title("KPM")
+	ax[1].get_xaxis().set_visible(False)
+	ax[1].grid(axis="y")
+	y_min, y_max = ax[1].get_ylim()
+	y_min = math.floor(y_min / 50) * 50
+	y_max = math.ceil(y_max / 50) * 50
+	ax[1].set_ylim(max(0, y_min - 10), y_max + 10)
+
+	fig.canvas.draw()
 	rsltL1.pack(pady=3)
 	rsltF1.pack(pady=5)
-	rsltL2.place(x=180, y=120, anchor="center")
-	rsltL3.place(x=460, y=120, anchor="center")
-	rsltL4.place(x=180, y=240, anchor="center")
-	rsltF2.place(x=180, y=145, anchor="center")
-	rsltF3.place(x=460, y=145, anchor="center")
-	rsltF4.place(x=180, y=265, anchor="center")
-	cTimeL.place(x=180, y=170, anchor="center")
-	accuL.place(x=460, y=170, anchor="center")
-	kpmL.place(x=180, y=290, anchor="center")
+	rsltL2.place(x=160, y=115, anchor="center")
+	rsltL3.place(x=160, y=229, anchor="center")
+	rsltL4.place(x=160, y=343, anchor="center")
+	rsltF2.place(x=160, y=135, anchor="center")
+	rsltF3.place(x=160, y=249, anchor="center")
+	rsltF4.place(x=160, y=363, anchor="center")
+	cTimeL.place(x=160, y=160, anchor="center")
+	accuL.place(x=160, y=274, anchor="center")
+	kpmL.place(x=160, y=388, anchor="center")
 	returnB.pack(side="right", anchor="se", padx=5, pady=5)
+	figF.place(x=440, y=250, anchor="center")
+	figC.get_tk_widget().pack(fill="both", expand=True)
 
 
 def ForcedReturn():
@@ -355,32 +385,23 @@ def ForcedReturn():
 def Quit():
 	sys.exit()
 
-
-word_r = ""
+	
 running = False
-pregame = False
-lines = None
-w_len = None
-originlines = None
 pattern = "(?<=KeyboardEvent\().*(?= down\))"
 search = ""
-found = True
-stop = False
-typing = False
-startflag = False
 t = dict()
 tnum = 0
 font = ImageFont.truetype("C:/Windows/Fonts/msgothic.ttc", 24)
 img = Image.new("RGB", (300, 50), (0,0, 0))
-draw = ImageDraw.Draw(img)
+iDraw = ImageDraw.Draw(img)
+fig = Figure.Figure(facecolor="#f0f0f0", dpi=80, figsize=(4, 4.65))
 
 
 root = Tk()
 root.title("Target_Typing")
 root.geometry(DisplayPos())
 root.resizable(False, False)
-# root.protocol("WM_DELETE_WINDOW", False)
-
+#root.protocol("WM_DELETE_WINDOW", False)
 
 style = ttk.Style()
 style.configure("light.TFrame", background="#2f4f4f")
@@ -434,24 +455,23 @@ fg_text = wordC1.create_text(0, 0, text="")
 circleL = ttk.Label(root, text="〇", font=("Yu Gothic UI", 200,"bold"), foreground="#ff0000")
 qamtL = ttk.Label(root, textvariable=qamtS, font=("Arial", 20), padding=[5, 5])
 
-rsltL1 = ttk.Label(root, text="Result", font=("Times New Roman", 30), padding=[10], foreground="#191970")
-rsltL2 = ttk.Label(root, text="Clear time", font=("Arial", 20))
-rsltL3 = ttk.Label(root, text="Accuracy", font=("Arial", 20))
-rsltL4 = ttk.Label(root, text="Key Per Minute", font=("Arial", 20))
+figF = ttk.Frame(root, width=350, height=350, relief="sunken")
+figC = FCTkAgg(fig, figF)
+rsltL1 = ttk.Label(root, text="Result", font=("Times New Roman", 30), padding=[8], foreground="#191970")
+rsltL2 = ttk.Label(root, text="Clear time", font=("Arial", 18))
+rsltL3 = ttk.Label(root, text="Accuracy", font=("Arial", 18))
+rsltL4 = ttk.Label(root, text="Key Per Minute", font=("Arial", 18))
 rsltF1 = ttk.Frame(root, width=540, height=4, style="light.TFrame")
 rsltF2= ttk.Frame(root, width=200, height=2, style="light.TFrame")
 rsltF3 = ttk.Frame(root, width=200, height=2, style="light.TFrame")
 rsltF4 = ttk.Frame(root, width=200, height=2, style="light.TFrame")
 cTime = StringVar(root)
-cTimeL = ttk.Label(root, textvariable=cTime, font=("Yu Gothic UI", 18))
+cTimeL = ttk.Label(root, textvariable=cTime, font=("Yu Gothic UI", 20))
 accu = StringVar(root, value="0.00 %")
-accuL = ttk.Label(root, textvariable=accu, font=("Yu Gothic UI", 18))
+accuL = ttk.Label(root, textvariable=accu, font=("Yu Gothic UI", 20))
 kpm = StringVar(root)
-kpmL = ttk.Label(root, textvariable=kpm, font=("Yu Gothic UI", 18))
+kpmL = ttk.Label(root, textvariable=kpm, font=("Yu Gothic UI", 20))
 
-if startflag == False:
-	TitleScreen()
-	startflag = True
-
+TitleScreen()
 
 root.mainloop()
