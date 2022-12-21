@@ -1,7 +1,6 @@
 # coding: utf-8
 import time, re, random, sys, keyboard, textwrap, pyautogui, math, datetime
 import threading as th
-import numpy as np
 import matplotlib.figure as Figure
 from tkinter import *
 from tkinter import ttk
@@ -9,7 +8,6 @@ from tkinter import messagebox as msgbox
 from PIL import Image, ImageFont, ImageDraw
 from simpleaudio import WaveObject
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg as FCTkAgg
-
 
 
 def DisplayPos():
@@ -83,7 +81,7 @@ def PreGame():
 	booktypeRB0.place(x=220, y=150, anchor="center")
 	booktypeRB1.place(x=420, y=150, anchor="center")
 	optionL3.pack(pady=40)
-	optionL4.place(x=260, y=230,anchor="center")
+	optionL4.place(x=260, y=230, anchor="center")
 	amountE.place(x=400, y=230, anchor="center")
 	if amountE.get() == "":
 		amountE.insert(index="end", string="10")
@@ -196,7 +194,6 @@ def StartScreen():
 		with open("1900.txt", "r", encoding="utf-8") as f:
 			originlines = f.readlines()
 	lines = list(map(lambda s:s.rstrip("\n"), originlines))
-	print(lines)
 	w_len = int(amountE.get())
 	t[tnum] = th.Thread(target=StartFunc1)
 	t[tnum].setDaemon(True)
@@ -239,7 +236,7 @@ def MainGame1():
 	missCntAll = 0
 	qamtI.set(1)
 	qamtL.place(x=0, y=240, anchor="w")
-	wordC1.place(x=320,y=180, anchor="center")
+	wordC1.place(x=320, y=180, anchor="center")
 	if int(rangefE.get()) <= int(rangelE.get()):
 		rf, rl = int(rangefE.get()), int(rangelE.get())
 	else:
@@ -260,7 +257,6 @@ def MainGame1():
 		word_r_len = len(word_r[0])
 		word_bg.set(word_r[0])
 		w, h = iDraw.textsize(word_r[0], font)
-		print(w, h)
 		bg_text = wordC1.create_text(320, 25, text=word_bg.get(), anchor="center", font=("MS Gothic", 20), fill="gray")
 		fg_w = 320 - (w/1.7)
 		meaning.set(textwrap.fill(word_r[1], 20))
@@ -271,7 +267,6 @@ def MainGame1():
 				search = re.search(pattern, t, flags=re.IGNORECASE).group()
 			except AttributeError:          
 				search = ""
-			print(search)
 			if search == "esc":
 				ForcedReturn()
 				break
@@ -293,13 +288,11 @@ def MainGame1():
 		typeCntAll += len(word_r[0])
 		missCntAll += missCnt
 		accuList.append(round(len(word_r[0]) / (len(word_r[0]) + missCnt) * 100, 2))
-		print(accuList)
 		missCnt = 0
 		time.sleep(0.8)
 		if qamtI.get() == int(amtE):
 			accu.set("{:.2%}".format(typeCntAll / (typeCntAll + missCntAll)) + " (" + str(typeCntAll) + "/" + str(typeCntAll + missCntAll) + ") ")
 			kpm.set(round(typeCntAll / (dispTime / 60), 1))
-			print(typeCntAll, dispTime)
 			Result()
 			break
 		circleL.place_forget()
@@ -392,7 +385,7 @@ search = ""
 t = dict()
 tnum = 0
 font = ImageFont.truetype("C:/Windows/Fonts/msgothic.ttc", 24)
-img = Image.new("RGB", (300, 50), (0,0, 0))
+img = Image.new("RGB", (300, 50), (0, 0, 0))
 iDraw = ImageDraw.Draw(img)
 fig = Figure.Figure(facecolor="#f0f0f0", dpi=80, figsize=(4, 4.65))
 
@@ -401,7 +394,7 @@ root = Tk()
 root.title("Target_Typing")
 root.geometry(DisplayPos())
 root.resizable(False, False)
-#root.protocol("WM_DELETE_WINDOW", False)
+root.protocol("WM_DELETE_WINDOW", False)
 
 style = ttk.Style()
 style.configure("light.TFrame", background="#2f4f4f")
@@ -427,9 +420,9 @@ booktypeRB1 = ttk.Radiobutton(root, text="Target-1900", style="light.TRadiobutto
 tcl_Validate = root.register(isOk)
 tcl_Validate_rf = root.register(isOk_rf)
 tcl_Validate_rl = root.register(isOk_rl)
-amountE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate, "%P","%S"))
-rangefE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate_rf, "%P","%S"))
-rangelE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate_rl, "%P","%S"))
+amountE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate, "%P", "%S"))
+rangefE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate_rf, "%P", "%S"))
+rangelE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate_rl, "%P", "%S"))
 inOrder = BooleanVar(root)
 inOrderCB = ttk.Checkbutton(root, text="Give questions in order", style="light.TCheckbutton", variable=inOrder)
 startB = ttk.Button(root, text="Start!", style="light.TButton", padding=[10, 5], command=StartScreen)
@@ -452,10 +445,10 @@ exitB = ttk.Button(root, text="exit", style="light.TButton", padding=[10, 5], co
 wordC1 = Canvas(root, width=640, height=50, bg="#f0f0f0")
 bg_text = wordC1.create_text(0, 0, text="")
 fg_text = wordC1.create_text(0, 0, text="")
-circleL = ttk.Label(root, text="〇", font=("Yu Gothic UI", 200,"bold"), foreground="#ff0000")
+circleL = ttk.Label(root, text="〇", font=("Yu Gothic UI", 200, "bold"), foreground="#ff0000")
 qamtL = ttk.Label(root, textvariable=qamtS, font=("Arial", 20), padding=[5, 5])
 
-figF = ttk.Frame(root, width=350, height=350, relief="sunken")
+figF = ttk.Frame(root, width=350, height=350)
 figC = FCTkAgg(fig, figF)
 rsltL1 = ttk.Label(root, text="Result", font=("Times New Roman", 30), padding=[8], foreground="#191970")
 rsltL2 = ttk.Label(root, text="Clear time", font=("Arial", 18))
