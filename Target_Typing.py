@@ -316,7 +316,7 @@ def MainGame2():
 		while not typing:
 			if stop:break
 			time.sleep(0.1)
-		time.sleep(0.2)
+		time.sleep(0.4)
 		startTime = time.time()
 		watchL.config(foreground="black")
 		while typing:
