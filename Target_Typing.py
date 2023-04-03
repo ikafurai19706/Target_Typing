@@ -6,16 +6,13 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox as msgbox
 from PIL import Image, ImageFont, ImageDraw
-from simpleaudio import WaveObject
+from simpleaudio import WaveObject, _simpleaudio
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg as FCTkAgg
 
 
 def DisplayPos():
-	S_width = root.winfo_screenwidth()
-	S_height = root.winfo_screenheight()
-	W_width = S_width//2 - 320
-	W_height = S_height//2 - 240
-	return "640x480+"+str(W_width)+"+"+str(W_height)
+	w, h = root.winfo_screenwidth(), root.winfo_screenheight()
+	return "640x480+"+str(w // 2 - 320)+"+"+str(h // 2 - 240)
 
 
 def ResetScreen():
@@ -37,7 +34,7 @@ def ResetScreen():
 	optionL7.pack_forget()
 	inOrderCB.place_forget()
 	countdownL.pack_forget()
-	meaningL.place_forget()
+	meanL.place_forget()
 	circleL.place_forget()
 	qamtL.place_forget()
 	booktypeRB0.place_forget()
@@ -280,10 +277,12 @@ def MainGame1():
 				missCnt += 1
 				try:
 					sound_miss.play()
-				except:
-					pass
+				except _simpleaudio.SimpleaudioError:
+					print("not enough memory")
+					time.sleep(0.1)
 		if stop:break
 		circleL.place(x=320, y=240, anchor="center")
+		sound_corr.play()
 		typing = False
 		typeCntAll += len(word_r[0])
 		missCntAll += missCnt
@@ -309,20 +308,22 @@ def MainGame2():
 	watch.set("00:00.00")
 	tempTime = 0
 	exitB.pack(side="bottom", anchor="se")
-	meaningL.place(x=320, y=220, anchor="n")
+	meanL.place(x=320, y=220, anchor="n")
 	watchL.pack(anchor='nw')
 	while not stop:
 		watchL.config(foreground="gray")
 		while not typing:
 			if stop:break
 			time.sleep(0.1)
-		time.sleep(0.2)
+		time.sleep(0.3)
 		startTime = time.time()
 		watchL.config(foreground="black")
 		while typing:
 			if stop:break
 			currentTime = time.time()
-			dispTime = round(currentTime - startTime + tempTime, 2)
+			dispTime = currentTime - startTime + tempTime
+			if dispTime.is_integer():
+				dispTime += 0.000001
 			watch.set(str(datetime.timedelta(seconds=dispTime))[2:10])
 		kpmList.append(round(len(word_r[0]) / ((currentTime - startTime)/60), 1))
 		tempTime = dispTime
@@ -391,7 +392,7 @@ fig = Figure.Figure(facecolor="#f0f0f0", dpi=80, figsize=(4, 4.65))
 
 
 root = Tk()
-root.title("Target_Typing")
+root.title("Target Typing!")
 root.geometry(DisplayPos())
 root.resizable(False, False)
 root.protocol("WM_DELETE_WINDOW", False)
@@ -433,6 +434,7 @@ countdownL = ttk.Label(root, textvariable=countdown, font=("Arial", 120))
 
 sound_type = WaveObject.from_wave_file("sounds/type.wav")
 sound_miss = WaveObject.from_wave_file("sounds/miss.wav")
+sound_corr = WaveObject.from_wave_file("sounds/corr.wav")
 watch = StringVar(root, value="00:00.00")
 word_fg = StringVar(root)
 word_bg = StringVar(root)
@@ -440,7 +442,7 @@ meaning = StringVar(root)
 qamtI = IntVar(root)
 qamtS = StringVar(root)
 watchL = ttk.Label(root, textvariable=watch, font=("Arial", 20), padding=[5, 5])
-meaningL = ttk.Label(root, textvariable=meaning, font=("Arial", 20), padding=[5, 5])
+meanL = ttk.Label(root, textvariable=meaning, font=("Arial", 20), padding=[5, 5])
 exitB = ttk.Button(root, text="exit", style="light.TButton", padding=[10, 5], command=ForcedReturn)
 wordC1 = Canvas(root, width=640, height=50, bg="#f0f0f0")
 bg_text = wordC1.create_text(0, 0, text="")
@@ -453,7 +455,7 @@ figC = FCTkAgg(fig, figF)
 rsltL1 = ttk.Label(root, text="Result", font=("Times New Roman", 30), padding=[8], foreground="#191970")
 rsltL2 = ttk.Label(root, text="Clear time", font=("Arial", 18))
 rsltL3 = ttk.Label(root, text="Accuracy", font=("Arial", 18))
-rsltL4 = ttk.Label(root, text="Key Per Minute", font=("Arial", 18))
+rsltL4 = ttk.Label(root, text="Typing Speed", font=("Arial", 18))
 rsltF1 = ttk.Frame(root, width=540, height=4, style="light.TFrame")
 rsltF2= ttk.Frame(root, width=200, height=2, style="light.TFrame")
 rsltF3 = ttk.Frame(root, width=200, height=2, style="light.TFrame")
@@ -465,6 +467,6 @@ accuL = ttk.Label(root, textvariable=accu, font=("Yu Gothic UI", 20))
 kpm = StringVar(root)
 kpmL = ttk.Label(root, textvariable=kpm, font=("Yu Gothic UI", 20))
 
-TitleScreen()
 
+TitleScreen()
 root.mainloop()
