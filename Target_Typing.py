@@ -16,14 +16,12 @@ def DisplayPos():
 
 
 def ResetScreen():
+	global wordC1
 	quitB.pack_forget()
 	titlestartB.pack_forget()
 	startB.pack_forget()
 	returnB.pack_forget()
 	exitB.pack_forget()
-	wordC1.delete(bg_text)
-	wordC1.delete(fg_text)
-	wordC1.place_forget()
 	titleL.pack_forget()
 	optionL1.pack_forget()
 	optionL2.pack_forget()
@@ -33,6 +31,7 @@ def ResetScreen():
 	optionL6.place_forget()
 	optionL7.pack_forget()
 	inOrderCB.place_forget()
+	pModeCB.place_forget()
 	countdownL.pack_forget()
 	meanL.place_forget()
 	circleL.place_forget()
@@ -57,6 +56,7 @@ def ResetScreen():
 	kpmL.place_forget()
 	figF.place_forget()
 	figC.get_tk_widget().pack_forget()
+	wordC1.place_forget()
 	
 
 def TitleScreen():
@@ -92,8 +92,15 @@ def PreGame():
 		rangelE.insert(index="end", string="10")
 	optionL7.pack(pady=40)
 	inOrderCB.place(x=200, y=380, anchor="center")
+	pModeCB.place(x=440, y=380, anchor="center")
 	startB.pack(side="right", anchor="se", padx=5, pady=5)
 	returnB.pack(side="right", anchor="se", padx=5, pady=5)
+
+def ToggleState():
+	if inOrder.get():
+		amountE["state"] = "disable"
+	else:
+		amountE["state"] = "active"
 
 def BlankCheck():
 	try:
@@ -192,8 +199,7 @@ def StartScreen():
 			originlines = f.readlines()
 	lines = list(map(lambda s:s.rstrip("\n"), originlines))
 	w_len = int(amountE.get())
-	t[tnum] = th.Thread(target=StartFunc1)
-	t[tnum].setDaemon(True)
+	t[tnum] = th.Thread(target=StartFunc1, daemon=True)
 	t[tnum].start()
 	tnum += 1
 
@@ -206,25 +212,24 @@ def StartFunc1():
 	countdownL.place(x=320, y=240, anchor="center")
 	for i in reversed(range(1, 4)):
 		countdown.set(i)
-		time.sleep(1)
+		sound_start.play()
+		time.sleep(0.9)
 	countdownL.place_forget()
-	t[tnum] = th.Thread(target=MainGame1)
-	t[tnum].setDaemon(True)
+	t[tnum] = th.Thread(target=MainGame1, daemon=True)
 	t[tnum].start()
 	tnum += 1
-	t[tnum] = th.Thread(target=MainGame2)
-	t[tnum].setDaemon(True)
+	t[tnum] = th.Thread(target=MainGame2, daemon=True)
 	t[tnum].start()
 	tnum += 1
 	while not stop:
-		time.sleep(0.5)
+		time.sleep(1.0)
 	pyautogui.press("enter")
 	stop = False
 	running = False
 
 
 def MainGame1():
-	global stop, bg_text, fg_text, typing, word_r, accuList
+	global stop, bg_text, fg_text, typing, word_r, accuList, wordC1
 	typing = False
 	stop = False
 	accuList = []
@@ -233,7 +238,10 @@ def MainGame1():
 	missCntAll = 0
 	qamtI.set(1)
 	qamtL.place(x=0, y=240, anchor="w")
+	wordC1.destroy()
+	wordC1 = Canvas(root, width=640, height=50, bg="#f0f0f0")
 	wordC1.place(x=320, y=180, anchor="center")
+	fg_text = wordC1.create_text(0, 0, text="")
 	if int(rangefE.get()) <= int(rangelE.get()):
 		rf, rl = int(rangefE.get()), int(rangelE.get())
 	else:
@@ -246,19 +254,17 @@ def MainGame1():
 		amtE = amountE.get()
 	typing = True
 	for i in quelist:
-		qamtS.set(str(qamtI.get()) + "/" + str(amtE))
-		fg_text = wordC1.create_text(0, 0, text="")
-		word_fg.set("")
 		j = 0
 		word_r = i.split(",")
-		word_r_len = len(word_r[0])
-		word_bg.set(word_r[0])
-		w, h = iDraw.textsize(word_r[0], font)
-		bg_text = wordC1.create_text(320, 25, text=word_bg.get(), anchor="center", font=("MS Gothic", 20), fill="gray")
-		fg_w = 320 - (w/1.7)
-		meaning.set(textwrap.fill(word_r[1], 20))
-		while j < word_r_len:
+		if pMode.get():
+			word_bg.set(word_r[0])
+			bg_text = wordC1.create_text(320, 25, text=word_bg.get(), anchor="center", font=("MS Gothic", 20), fill="gray")
+		meaning.set(textwrap.fill(word_r[1], 16))
+		r_len = len(word_r[0])
+		qamtS.set(str(qamtI.get()) + "/" + str(amtE))
+		while j < r_len:
 			t = str(keyboard.read_event())
+
 			if stop:break
 			try:
 				search = re.search(pattern, t, flags=re.IGNORECASE).group()
@@ -268,10 +274,10 @@ def MainGame1():
 				ForcedReturn()
 				break
 			elif search == word_r[0][j]:
-				word_fg.set(str(word_fg.get())+word_r[0][j])
+				word_fg.set(word_r[0][0:j+1].ljust(r_len, " "))
 				j += 1
 				wordC1.delete(fg_text)
-				fg_text = wordC1.create_text(fg_w, 25, text=word_fg.get(), anchor="w", font=("MS Gothic", 20))
+				fg_text = wordC1.create_text(320, 25, text=word_fg.get(), anchor="center", font=("MS Gothic", 20))
 				sound_type.play()
 			elif search != "":
 				missCnt += 1
@@ -281,22 +287,25 @@ def MainGame1():
 					print("not enough memory")
 					time.sleep(0.1)
 		if stop:break
+		typing = False
+		time.sleep(0.01)
+		circleL = ttk.Label(root, text="〇", font=("Yu Gothic UI", 200, "bold"), foreground="#ff0000")
 		circleL.place(x=320, y=240, anchor="center")
 		sound_corr.play()
-		typing = False
 		typeCntAll += len(word_r[0])
 		missCntAll += missCnt
 		accuList.append(round(len(word_r[0]) / (len(word_r[0]) + missCnt) * 100, 2))
 		missCnt = 0
 		time.sleep(0.8)
+		if pMode.get():
+			wordC1.delete(bg_text)
+		wordC1.delete(fg_text)
+		circleL.place_forget()
 		if qamtI.get() == int(amtE):
 			accu.set("{:.2%}".format(typeCntAll / (typeCntAll + missCntAll)) + " (" + str(typeCntAll) + "/" + str(typeCntAll + missCntAll) + ") ")
 			kpm.set(round(typeCntAll / (dispTime / 60), 1))
 			Result()
 			break
-		circleL.place_forget()
-		wordC1.delete(bg_text)
-		wordC1.delete(fg_text)
 		qamtI.set(qamtI.get()+1)
 		typing = True
 		
@@ -370,7 +379,6 @@ def Result():
 	figF.place(x=440, y=250, anchor="center")
 	figC.get_tk_widget().pack(fill="both", expand=True)
 
-
 def ForcedReturn():
 	global stop
 	stop = True
@@ -389,7 +397,6 @@ font = ImageFont.truetype("C:/Windows/Fonts/msgothic.ttc", 24)
 img = Image.new("RGB", (300, 50), (0, 0, 0))
 iDraw = ImageDraw.Draw(img)
 fig = Figure.Figure(facecolor="#f0f0f0", dpi=80, figsize=(4, 4.65))
-
 
 root = Tk()
 root.title("Target Typing!")
@@ -425,13 +432,16 @@ amountE = ttk.Entry(root, width=10, justify="right", validate="key", validatecom
 rangefE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate_rf, "%P", "%S"))
 rangelE = ttk.Entry(root, width=10, justify="right", validate="key", validatecommand=(tcl_Validate_rl, "%P", "%S"))
 inOrder = BooleanVar(root)
-inOrderCB = ttk.Checkbutton(root, text="Give questions in order", style="light.TCheckbutton", variable=inOrder)
+inOrderCB = ttk.Checkbutton(root, text="Give questions in order", style="light.TCheckbutton", variable=inOrder, command=ToggleState)
+pMode = BooleanVar(root, value=True)
+pModeCB = ttk.Checkbutton(root, text="Practice Mode", style="light.TCheckbutton", variable=pMode)
 startB = ttk.Button(root, text="Start!", style="light.TButton", padding=[10, 5], command=StartScreen)
 returnB = ttk.Button(root, text="Return", style="light.TButton", padding=[10, 5], command=TitleScreen)
 
 countdown = StringVar(root)
 countdownL = ttk.Label(root, textvariable=countdown, font=("Arial", 120))
 
+sound_start = WaveObject.from_wave_file("sounds/start.wav")
 sound_type = WaveObject.from_wave_file("sounds/type.wav")
 sound_miss = WaveObject.from_wave_file("sounds/miss.wav")
 sound_corr = WaveObject.from_wave_file("sounds/corr.wav")
@@ -444,9 +454,7 @@ qamtS = StringVar(root)
 watchL = ttk.Label(root, textvariable=watch, font=("Arial", 20), padding=[5, 5])
 meanL = ttk.Label(root, textvariable=meaning, font=("Arial", 20), padding=[5, 5])
 exitB = ttk.Button(root, text="exit", style="light.TButton", padding=[10, 5], command=ForcedReturn)
-wordC1 = Canvas(root, width=640, height=50, bg="#f0f0f0")
-bg_text = wordC1.create_text(0, 0, text="")
-fg_text = wordC1.create_text(0, 0, text="")
+wordC1 = Canvas(root, width=640, height=50, bg="#f0f0f0")	
 circleL = ttk.Label(root, text="〇", font=("Yu Gothic UI", 200, "bold"), foreground="#ff0000")
 qamtL = ttk.Label(root, textvariable=qamtS, font=("Arial", 20), padding=[5, 5])
 
@@ -469,4 +477,5 @@ kpmL = ttk.Label(root, textvariable=kpm, font=("Yu Gothic UI", 20))
 
 
 TitleScreen()
+
 root.mainloop()
